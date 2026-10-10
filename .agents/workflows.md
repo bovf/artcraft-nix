@@ -16,7 +16,7 @@ This is the default workflow when asked to update the creative suite to the late
 
 ### 1. Start from an accountable checkout
 
-Do not overwrite existing work or use `git reset --hard`. Preserve any uncommitted CI draft outside the index. Start a reviewed update branch from the intended published baseline:
+Do not overwrite existing work or use `git reset --hard`. Preserve unrelated work; CI changes require separate review and must remain source-mirroring only. Start a reviewed update branch from the intended published baseline:
 
 ```bash
 git status --short --branch
@@ -117,17 +117,34 @@ nix shell nixpkgs#gitleaks --command gitleaks dir . --redact --no-banner
 git status --short
 ```
 
-Stage paths explicitly; **do not use `git add .`** while the CI draft is excluded:
+Stage paths explicitly; **do not use `git add .`** with unrelated local changes:
 
 ```bash
 git add flake.nix flake.lock packages tests README.md LICENSE .gitignore .agents docs
 git diff --cached --check
 git diff --cached --name-status
-# This must print no CI path:
-git diff --cached --name-only -- .gitlab-ci.yml .gitlab-ci.yaml
+# Review any CI changes separately; ordinary app updates do not change mirroring:
+git diff --cached -- .gitlab-ci.yml ci/ tests/mirror-ci.py
 ```
 
-After authorized review, use a concise conventional subject, then a normal feature-branch push to GitLab. No co-author/signature trailers, force push, unsolicited merge, mirror or activation. Verify the pushed SHA with `git ls-remote origin refs/heads/BRANCH`. For a scoped downstream update, advance only its `artcraft-nix` input after this repository's accepted commit is published; follow the downstream repository's own authorization and tests.
+After authorized review, use a concise conventional subject, then a normal feature-branch push to GitLab. No co-author/signature trailers, force-pushing GitLab feature branches, unsolicited merge or activation. Only the authorized default-branch CI mirror job force-updates external source mirrors. Verify the pushed SHA with `git ls-remote origin refs/heads/BRANCH`. For a scoped downstream update, advance only its `artcraft-nix` input after this repository's accepted commit is published; follow the downstream repository's own authorization and tests.
+
+## Mirror CI changes
+
+The operator authorized `.gitlab-ci.yml` after the source-only migration. Match `pi-nix`'s default-branch-push workflow, full fresh clone, `nix-cache` tag, serialization and timeout; do not turn this into an app-build/cache/deploy pipeline. The user creates GitHub/Codeberg repositories manually; see [variable names and setup](../README.md#gitlab-ci-source-mirrors). Never copy actual secrets into YAML, arguments, artifacts or logs. `GITLAB_TOKEN`/`ATTIC_TOKEN` are unused; do not silently repurpose them for external mirror authentication.
+
+Local validation (no remote push):
+
+```bash
+python3 tests/mirror-ci.py
+bash -n ci/mirror.sh
+nix shell --inputs-from . nixpkgs#yamllint nixpkgs#shellcheck \
+  --command bash -c 'yamllint .gitlab-ci.yml && shellcheck ci/mirror.sh'
+```
+
+The synthetic Git fixture covers default-branch-only gates, unconfigured skips, exact source-only push destinations/refspecs, token-free command arguments, askpass cleanup and failure propagation. It never uses real credentials or a network. The YAML must continue rejecting feature/MR/tag/schedule/manual events; tokens must reach only their expected host, never an inline credential URL or other host. Keep the temporary helper secret-free on disk and disable Git HTTP tracing. Changes to URL/auth behavior require these tests.
+
+Stage `.gitlab-ci.yml`, `ci/mirror.sh` and `tests/mirror-ci.py` explicitly for an authorized CI change; the earlier migration's CI omission is historical, not a current prohibition. Do not add a duplicate `.gitlab-ci.yaml`. A feature push does not execute the default-branch-only job. A local green fixture or skipped destination is not a verified mirror; confirm live job logs and all three source SHAs only after approved merge and actual configured execution.
 
 ## Narrow changes and recovery
 

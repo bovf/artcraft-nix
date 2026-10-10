@@ -1,0 +1,25 @@
+# yamllint disable rule:line-length rule:document-start
+stages:
+  - mirror
+
+workflow:
+  rules:
+    - if: '$CI_PIPELINE_SOURCE == "push" && $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH'
+    - when: never
+
+variables:
+  GIT_STRATEGY: clone
+  GIT_DEPTH: "0"
+  GITHUB_MIRROR_REPO: bovf/artcraft-nix
+  CODEBERG_MIRROR_REPO: bovfbovf/artcraft-nix
+
+mirror:main:
+  stage: mirror
+  tags:
+    - nix-cache
+  resource_group: main-mirror-push
+  timeout: 30m
+  rules:
+    - if: '$CI_PIPELINE_SOURCE == "push" && $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH'
+  script:
+    - bash ci/mirror.sh

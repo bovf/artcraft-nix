@@ -4,9 +4,9 @@ Read this file first, then [workflows.md](workflows.md). User-facing usage is in
 
 ## Purpose and repository boundary
 
-This is an independent, reusable source-distribution flake for thirteen Storytold applications, hosted at `git@gitlab.dobryops.com:nix/artcraft-nix.git`. It does not configure a machine or depend on `pl-badwater`. Downstream system integration, mirrors, synchronization, cache publication and deployment are separate work requiring approval. Do not modify sibling repositories as part of a package update.
+This is an independent, reusable source-distribution flake for thirteen Storytold applications, hosted at `git@gitlab.dobryops.com:nix/artcraft-nix.git`. It does not configure a machine or depend on `pl-badwater`. Downstream system integration, cache publication and deployment are separate work requiring approval. Source-only default-branch GitHub/Codeberg mirrors are now authorized through the GitLab CI job modeled on `pi-nix`. Do not modify sibling repositories as part of a package update.
 
-**CI is intentionally omitted.** Neither `.gitlab-ci.yml` nor `.gitlab-ci.yaml` was migrated from the old repository. Never add, stage or push either filename until the operator explicitly authorizes it.
+**CI is source-mirroring only.** The operator superseded the migration's CI exclusion: `.gitlab-ci.yml` now selects the protected default-branch push workflow on the `nix-cache` runner. `ci/mirror.sh` references `GITHUB_TOKEN`/`CODEBERG_TOKEN` and optional URL overrides, supplies tokens through a temporary askpass helper rather than Git arguments, and force-updates only the selected default branch. No package builds, binary/cache uploads, tags, feature-branch mirrors or deployment are authorized by this job. Do not create a second `.gitlab-ci.yaml` or expose secret variable values; see [CI setup](../README.md#gitlab-ci-source-mirrors).
 
 ## Source authority and layout
 

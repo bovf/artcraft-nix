@@ -2,7 +2,7 @@
 
 Standalone, revision-pinned Nix source packages for the [Storytold](https://github.com/storytold) creative applications. Import this flake from NixOS, Home Manager or another flake, without depending on `pl-badwater`.
 
-This is independent packaging, not an official or endorsed ArtCraft release. Development is hosted on [our GitLab](https://gitlab.dobryops.com/nix/artcraft-nix). Codeberg/GitHub mirrors and cross-repository synchronization are **not configured yet**.
+This is independent packaging, not an official or endorsed ArtCraft release. Development is hosted on [our GitLab](https://gitlab.dobryops.com/nix/artcraft-nix). GitLab CI is configured for default-branch source mirrors to GitHub/Codeberg; destination repositories are created manually. Mirror execution/parity is not yet verified, and downstream synchronization is not configured.
 
 ## Packages
 
@@ -40,7 +40,7 @@ nix build .#soundcraft --no-link
 
 Outputs target `x86_64-linux`, `aarch64-linux` and `aarch64-darwin`. Current nixpkgs 26.11 dropped Intel (`x86_64-darwin`) macOS support; it is deliberately not advertised as a working output. Linux uses the host's graphics drivers, display server and desktop portals; wrappers supply the loader/client libraries, **not** a replacement GPU driver. On non-NixOS Linux you may need a host-compatible graphics bridge such as nixGL. WSL GUI use additionally requires WSLg. Darwin packages provide command-line launchers; signed/notarized `.app` bundles are not produced.
 
-All thirteen applications have completed native x86_64 Linux builds, configured unit/install checks and isolated software-rendered GUI smoke tests. See [validation](docs/validation.md) for exact evidence and limits. ARM Linux/Darwin are evaluation-only until tested on native runners; neither hardware nor service behavior is implicitly verified by a Linux build. CI configuration is intentionally omitted from this repository.
+All thirteen applications have completed native x86_64 Linux builds, configured unit/install checks and isolated software-rendered GUI smoke tests. See [validation](docs/validation.md) for exact evidence and limits. ARM Linux/Darwin are evaluation-only until tested on native runners; neither hardware nor service behavior is implicitly verified by a Linux build. GitLab CI mirrors source only; it does not build packages or verify hardware.
 
 ## Import into another flake
 
@@ -111,4 +111,30 @@ After source updates, inspect the upstream manifests/licenses, build the affecte
 
 Read [agent context](.agents/AGENTS.md) and the [all-app update workflow](.agents/workflows.md#update-all-applications) for the full procedure, dependency hash/model/compiler handling, validation and publishing safeguards. “Latest” means the selected default-branch snapshots at update time, not necessarily upstream release tags.
 
-GitLab CI YAML is intentionally **omitted**, by operator instruction; neither `.gitlab-ci.yml` nor `.gitlab-ci.yaml` is included, and no pipeline result is claimed. No binary-cache credentials, publication, deployment, repository mirrors or sync jobs are configured.
+## GitLab CI source mirrors
+
+[`.gitlab-ci.yml`](.gitlab-ci.yml) uses the same setup as `pi-nix`: default-branch pushes only, a full fresh clone (`GIT_DEPTH=0`), the `nix-cache` runner, `main-mirror-push` serialization and a 30-minute job timeout. It runs [the mirror helper](ci/mirror.sh), not Nix builds or cache publication. Feature branches, tags, merge requests, schedules and manual pipelines do not run this workflow.
+
+Create these destination repositories manually, without an initial README/license commit:
+
+- GitHub: **`bovf/artcraft-nix`**
+- Codeberg: **`bovfbovf/artcraft-nix`**
+
+The job references the same variable names as `pi-nix`; secret values never belong in YAML:
+
+| Variable | Use |
+|---|---|
+| `GITHUB_MIRROR_REPO` | Default `bovf/artcraft-nix`; non-secret repository override. |
+| `CODEBERG_MIRROR_REPO` | Default `bovfbovf/artcraft-nix`; non-secret repository override. |
+| `GITHUB_TOKEN` | Protected/masked GitHub token with write access to the destination repository. |
+| `CODEBERG_TOKEN` | Protected/masked Codeberg token with write access as `bovfbovf`. |
+| `GITHUB_MIRROR_URL` | Optional credential-free `https://github.com/…` or `git@github.com:…` destination. |
+| `CODEBERG_MIRROR_URL` | Optional credential-free `https://codeberg.org/…` or `git@codeberg.org:…` destination. |
+
+Use the existing CI variable settings for tokens (environment scope `*`; disable expansion for secret values). Their names are referenced, **not** defined as empty YAML defaults that could interfere with inherited variables. Tokens are supplied through a temporary Git askpass helper, never embedded into Git arguments. Unlike the reference's token-bearing URL fallback, URL overrides here must not contain credentials: keep them in the corresponding token variable, or use SSH with runner-managed keys. Do not enable `CI_DEBUG_TRACE` for credentialed jobs.
+
+The supplied settings page confirms the Nix group runner with tag `nix-cache` is available. It currently lists inherited `GITLAB_TOKEN` and `ATTIC_TOKEN`, but those are neither needed nor substitutes for GitHub/Codeberg authentication; no live variable provisioning is claimed. A missing mirror URL/token causes that destination to be skipped, as in `pi-nix`. Once credentials are available by these names, creating the destination repositories is the remaining external setup. Fine-grained tokens must include write access to the new repositories.
+
+Protect the default branch so protected variables are available. The job **force-updates only that branch**: GitLab is authoritative, so do not edit the mirrored branch independently. Tags and other branches are not copied. Optional URL overrides must point at the intended ArtCraft repositories, not the old Pi destinations.
+
+No live mirror push, GitLab pipeline success or destination parity is asserted by local tests. Before using public mirror URLs in consumers, verify the GitLab/GitHub/Codeberg default-branch SHA and fetched flake bytes after a real run. No application binaries, binary caches or deployment are published; ArtCraft's separate redistribution restrictions remain in force.

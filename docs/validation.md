@@ -64,4 +64,6 @@ The recreated canonical repository is `git@gitlab.dobryops.com:nix/artcraft-nix.
 
 ## Publication boundary
 
-Only source packaging/context is published to the project's GitLab repository. Both GitLab CI YAML spellings are omitted by operator instruction; no GitLab pipeline execution is asserted. No mirror, binary/cache publication or downstream deployment was configured. ArtCraft binary redistribution still requires confirmed upstream permission.
+The initial migration omitted CI. The operator subsequently authorized a `pi-nix`-style source-only mirror pipeline: `.gitlab-ci.yml` targets GitHub `bovf/artcraft-nix` and Codeberg `bovfbovf/artcraft-nix` on default-branch pushes using the existing `nix-cache` runner. Secret token/optional URL variables are referenced by name, not provisioned or stored in Git. Local YAML/ShellCheck validation and synthetic mirror tests cover event gates, missing-variable skips, destination/refspec selection, token-free Git arguments, helper cleanup and failure propagation. No real credentials or external pushes are used in those tests.
+
+No live GitLab pipeline execution, mirror parity or external repository creation is asserted. Only source packaging/context is mirrored; no application binaries/cache or downstream deployment is configured. ArtCraft binary redistribution still requires confirmed upstream permission.
