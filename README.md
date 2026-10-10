@@ -113,28 +113,4 @@ Read [agent context](.agents/AGENTS.md) and the [all-app update workflow](.agent
 
 ## GitLab CI source mirrors
 
-[`.gitlab-ci.yml`](.gitlab-ci.yml) uses the same setup as `pi-nix`: default-branch pushes only, a full fresh clone (`GIT_DEPTH=0`), the `nix-cache` runner, `main-mirror-push` serialization and a 30-minute job timeout. The full inline script is copied from `pi-nix`, with only the two repository defaults changed; there are no extra helper scripts or destination restrictions. It does not run Nix builds or cache publication. Feature branches, tags, merge requests, schedules and manual pipelines do not run this workflow.
-
-Create these destination repositories manually, without an initial README/license commit:
-
-- GitHub: **`bovf/artcraft-nix`**
-- Codeberg: **`bovfbovf/artcraft-nix`**
-
-The job references the same variable names as `pi-nix`; secret values never belong in YAML:
-
-| Variable | Use |
-|---|---|
-| `GITHUB_MIRROR_REPO` | Default `bovf/artcraft-nix`; non-secret repository override. |
-| `CODEBERG_MIRROR_REPO` | Default `bovfbovf/artcraft-nix`; non-secret repository override. |
-| `GITHUB_TOKEN` | Protected/masked GitHub token with write access to the destination repository. |
-| `CODEBERG_TOKEN` | Protected/masked Codeberg token with write access as `bovfbovf`. |
-| `GITHUB_MIRROR_URL` | Optional complete Git push URL; takes precedence over the GitHub token/repository fallback. |
-| `CODEBERG_MIRROR_URL` | Optional complete Git push URL; takes precedence over the Codeberg token/repository fallback. |
-
-Use the existing CI variable settings for tokens (environment scope `*`; disable expansion for secret values). Their names are referenced, **not** defined as empty YAML defaults that could interfere with inherited variables. As in `pi-nix`, a complete mirror URL is used unchanged; otherwise the script constructs the standard authenticated URL from the matching token and repository variable. Repository values are defaults, not enforced destinations. Credential-bearing URL variables must also be protected/masked; do not enable `CI_DEBUG_TRACE` or print resolved URLs/tokens. This preserves the reference's token-in-URL authentication behavior.
-
-The supplied settings page confirms the Nix group runner with tag `nix-cache` is available. It currently lists inherited `GITLAB_TOKEN` and `ATTIC_TOKEN`, but those are neither needed nor substitutes for GitHub/Codeberg authentication; no live variable provisioning is claimed. A missing mirror URL/token causes that destination to be skipped, as in `pi-nix`. Once credentials are available by these names, creating the destination repositories is the remaining external setup. Fine-grained tokens must include write access to the new repositories.
-
-Protect the default branch so protected variables are available. The job **force-updates only that branch**: GitLab is authoritative, so do not edit the mirrored branch independently. Tags and other branches are not copied. Optional URL overrides must point at the intended ArtCraft repositories, not the old Pi destinations.
-
-No live mirror push, GitLab pipeline success or destination parity is asserted by local tests. Before using public mirror URLs in consumers, verify the GitLab/GitHub/Codeberg default-branch SHA and fetched flake bytes after a real run. No application binaries, binary caches or deployment are published; ArtCraft's separate redistribution restrictions remain in force.
+On default-branch pushes, [GitLab CI](.gitlab-ci.yml) syncs the source branch to the configured GitHub and Codeberg mirrors using CI variables. It does not build packages, upload binaries or deploy anything.
