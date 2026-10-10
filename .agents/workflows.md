@@ -124,7 +124,7 @@ git add flake.nix flake.lock packages tests README.md LICENSE .gitignore .agents
 git diff --cached --check
 git diff --cached --name-status
 # Review any CI changes separately; ordinary app updates do not change mirroring:
-git diff --cached -- .gitlab-ci.yml ci/ tests/mirror-ci.py
+git diff --cached -- .gitlab-ci.yml
 ```
 
 After authorized review, use a concise conventional subject, then a normal feature-branch push to GitLab. No co-author/signature trailers, force-pushing GitLab feature branches, unsolicited merge or activation. Only the authorized default-branch CI mirror job force-updates external source mirrors. Verify the pushed SHA with `git ls-remote origin refs/heads/BRANCH`. For a scoped downstream update, advance only its `artcraft-nix` input after this repository's accepted commit is published; follow the downstream repository's own authorization and tests.
@@ -133,18 +133,17 @@ After authorized review, use a concise conventional subject, then a normal featu
 
 The operator authorized `.gitlab-ci.yml` after the source-only migration. Match `pi-nix`'s default-branch-push workflow, full fresh clone, `nix-cache` tag, serialization and timeout; do not turn this into an app-build/cache/deploy pipeline. The user creates GitHub/Codeberg repositories manually; see [variable names and setup](../README.md#gitlab-ci-source-mirrors). Never copy actual secrets into YAML, arguments, artifacts or logs. `GITLAB_TOKEN`/`ATTIC_TOKEN` are unused; do not silently repurpose them for external mirror authentication.
 
+Preserve the complete inline reference pipeline: the only deliberate differences from `pi-nix/.gitlab-ci.yml` are `GITHUB_MIRROR_REPO=bovf/artcraft-nix` and `CODEBERG_MIRROR_REPO=bovfbovf/artcraft-nix`. URL variables override token/repository fallbacks without custom host restrictions. Do not split it into a helper or change authentication/variable precedence without being asked.
+
 Local validation (no remote push):
 
 ```bash
-python3 tests/mirror-ci.py
-bash -n ci/mirror.sh
-nix shell --inputs-from . nixpkgs#yamllint nixpkgs#shellcheck \
-  --command bash -c 'yamllint .gitlab-ci.yml && shellcheck ci/mirror.sh'
+nix shell --inputs-from . nixpkgs#yamllint --command yamllint .gitlab-ci.yml
 ```
 
-The synthetic Git fixture covers default-branch-only gates, unconfigured skips, exact source-only push destinations/refspecs, token-free command arguments, askpass cleanup and failure propagation. It never uses real credentials or a network. The YAML must continue rejecting feature/MR/tag/schedule/manual events; tokens must reach only their expected host, never an inline credential URL or other host. Keep the temporary helper secret-free on disk and disable Git HTTP tracing. Changes to URL/auth behavior require these tests.
+Also parse YAML to extract `mirror:main.script`, check the Bash syntax/ShellCheck, and compare the full configuration to the reference after those two substitutions. For mocked tests use only synthetic URLs/tokens and a fake Git executable; never invoke a real authenticated mirror push just to validate YAML. Keep token/credential-bearing URL variables protected/masked and job tracing disabled. Local tests are not evidence of live credentials or external repository permissions.
 
-Stage `.gitlab-ci.yml`, `ci/mirror.sh` and `tests/mirror-ci.py` explicitly for an authorized CI change; the earlier migration's CI omission is historical, not a current prohibition. Do not add a duplicate `.gitlab-ci.yaml`. A feature push does not execute the default-branch-only job. A local green fixture or skipped destination is not a verified mirror; confirm live job logs and all three source SHAs only after approved merge and actual configured execution.
+Stage `.gitlab-ci.yml` explicitly for an authorized CI change; the earlier migration's CI omission is historical, not a current prohibition. Do not add a duplicate `.gitlab-ci.yaml`. A feature push does not execute the default-branch-only job. A local green fixture or skipped destination is not a verified mirror; confirm live job logs and all three source SHAs only after approved merge and actual configured execution.
 
 ## Narrow changes and recovery
 
