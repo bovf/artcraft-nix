@@ -1,0 +1,286 @@
+{
+  "nodes": {
+    "artcraft": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1791565431,
+        "narHash": "sha256-LCtwKONxqvXi7GcLItT7FHWtWbe9XfVOv9LA8GXyEiQ=",
+        "owner": "storytold",
+        "repo": "artcraft",
+        "rev": "910bfe4e8494976b936772214142bb52593819f2",
+        "type": "github"
+      },
+      "original": {
+        "owner": "storytold",
+        "repo": "artcraft",
+        "type": "github"
+      }
+    },
+    "cadcraft": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1791594119,
+        "narHash": "sha256-TbJdAijdj8TqP0M4hsHyrIfPAIDp39m08DlTAWDZDis=",
+        "owner": "storytold",
+        "repo": "cadcraft",
+        "rev": "43e33add44ffcf386f7ca0f06cfe1af7acae7256",
+        "type": "github"
+      },
+      "original": {
+        "owner": "storytold",
+        "repo": "cadcraft",
+        "type": "github"
+      }
+    },
+    "craft-fonts": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1791311399,
+        "narHash": "sha256-4E9OrthE5z39xFXpvpwn4Fn6RH3wX2sF56rZZejZT+I=",
+        "owner": "storytold",
+        "repo": "craft-fonts",
+        "rev": "8dcdacd5153e64560d109541a47d806f26f048c0",
+        "type": "github"
+      },
+      "original": {
+        "owner": "storytold",
+        "repo": "craft-fonts",
+        "type": "github"
+      }
+    },
+    "deckcraft": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1791594122,
+        "narHash": "sha256-X04rQBsPWyj++fkxKa1lqtAkfnN0uykk2Lsn95P4M8w=",
+        "owner": "storytold",
+        "repo": "deckcraft",
+        "rev": "84acb49895c8190396b686c1eb9f20c730e48633",
+        "type": "github"
+      },
+      "original": {
+        "owner": "storytold",
+        "repo": "deckcraft",
+        "type": "github"
+      }
+    },
+    "designcraft": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1791619309,
+        "narHash": "sha256-JqMW1NG24SNwbKUmJkdNz2B7X4cZnP52AO88AIeW+2Q=",
+        "owner": "storytold",
+        "repo": "designcraft",
+        "rev": "0b69d6856ca0bca10cfe712d9f8ef724af74c8f4",
+        "type": "github"
+      },
+      "original": {
+        "owner": "storytold",
+        "repo": "designcraft",
+        "type": "github"
+      }
+    },
+    "effectcraft": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1791594128,
+        "narHash": "sha256-4Yv2dcN8DSLzF2QTmz3FCW3Hr7yFMemjxEgCW7jTGeU=",
+        "owner": "storytold",
+        "repo": "effectcraft",
+        "rev": "813c7c4650f0d4c805da620c8d5837c9600ad2e3",
+        "type": "github"
+      },
+      "original": {
+        "owner": "storytold",
+        "repo": "effectcraft",
+        "type": "github"
+      }
+    },
+    "filmcraft": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1791594131,
+        "narHash": "sha256-X/pSYTJbacvEqnVrLgTROo0PVYNZirdNwPhlANk+AgI=",
+        "owner": "storytold",
+        "repo": "filmcraft",
+        "rev": "7bd76212629a067a9d1c5426d751de9faf4664b7",
+        "type": "github"
+      },
+      "original": {
+        "owner": "storytold",
+        "repo": "filmcraft",
+        "type": "github"
+      }
+    },
+    "gridcraft": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1791594134,
+        "narHash": "sha256-fW7nSYdmUUWjVqZnL2/Ctzimqosg678XQGmycKK8U1k=",
+        "owner": "storytold",
+        "repo": "gridcraft",
+        "rev": "13664fe66b952e7abcd68e2371c1d4f34f990dac",
+        "type": "github"
+      },
+      "original": {
+        "owner": "storytold",
+        "repo": "gridcraft",
+        "type": "github"
+      }
+    },
+    "lightcraft": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1791613404,
+        "narHash": "sha256-vsfwSUIz5gfTa8jBQt6voz/zaw+74y5oXUwB0PBLoDc=",
+        "owner": "storytold",
+        "repo": "lightcraft",
+        "rev": "543695129932c92338186911405ef26444c5a1c6",
+        "type": "github"
+      },
+      "original": {
+        "owner": "storytold",
+        "repo": "lightcraft",
+        "type": "github"
+      }
+    },
+    "nixpkgs": {
+      "locked": {
+        "lastModified": 1791456040,
+        "narHash": "sha256-H83yz/do+hjOO0uujHyH8RgtIQP2v7Mw+cLwcZK/xKc=",
+        "owner": "NixOS",
+        "repo": "nixpkgs",
+        "rev": "e7439b6b14ad3cc35d05608ebca9bce01a25f5f8",
+        "type": "github"
+      },
+      "original": {
+        "owner": "NixOS",
+        "ref": "nixos-unstable",
+        "repo": "nixpkgs",
+        "type": "github"
+      }
+    },
+    "pdfcraft": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1791600456,
+        "narHash": "sha256-9vRH7tHlhbRmbkVdcgYKSuWfTiZi0BcfsQM1OkptUG8=",
+        "owner": "storytold",
+        "repo": "pdfcraft",
+        "rev": "68e91d4815ed43212895589411aa3d21b2a84bc3",
+        "type": "github"
+      },
+      "original": {
+        "owner": "storytold",
+        "repo": "pdfcraft",
+        "type": "github"
+      }
+    },
+    "photocraft": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1791619466,
+        "narHash": "sha256-4ZVsSGpodhhm/eijLUAM6OIfga/+AzRhSra31Aqz7So=",
+        "owner": "storytold",
+        "repo": "photocraft",
+        "rev": "d4ec2db0a7975f3935f0d5121bfc9bcdd51631a9",
+        "type": "github"
+      },
+      "original": {
+        "owner": "storytold",
+        "repo": "photocraft",
+        "type": "github"
+      }
+    },
+    "root": {
+      "inputs": {
+        "artcraft": "artcraft",
+        "cadcraft": "cadcraft",
+        "craft-fonts": "craft-fonts",
+        "deckcraft": "deckcraft",
+        "designcraft": "designcraft",
+        "effectcraft": "effectcraft",
+        "filmcraft": "filmcraft",
+        "gridcraft": "gridcraft",
+        "lightcraft": "lightcraft",
+        "nixpkgs": "nixpkgs",
+        "pdfcraft": "pdfcraft",
+        "photocraft": "photocraft",
+        "rust-overlay": "rust-overlay",
+        "soundcraft": "soundcraft",
+        "vectorcraft": "vectorcraft",
+        "wordcraft": "wordcraft"
+      }
+    },
+    "rust-overlay": {
+      "inputs": {
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1791620365,
+        "narHash": "sha256-CVZXIDNw7HEwyD8X6q9Ln370Sc0ZqRlTzDRwOZ1hJMY=",
+        "owner": "oxalica",
+        "repo": "rust-overlay",
+        "rev": "e90fafa71b440fabcd52dd7fb017ab2da81c781a",
+        "type": "github"
+      },
+      "original": {
+        "owner": "oxalica",
+        "repo": "rust-overlay",
+        "type": "github"
+      }
+    },
+    "soundcraft": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1791619433,
+        "narHash": "sha256-+o0vnTIjLPCZu1gND0xWX3g9mARdrL/GGMLqIroB9go=",
+        "owner": "storytold",
+        "repo": "soundcraft",
+        "rev": "3bc2d92b4e3d33c8793a0e07e2fac10224b8f75e",
+        "type": "github"
+      },
+      "original": {
+        "owner": "storytold",
+        "repo": "soundcraft",
+        "type": "github"
+      }
+    },
+    "vectorcraft": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1791617843,
+        "narHash": "sha256-Am40e/QiBbPW8JyCjWJ7gjAGQKFoOqRvNEDREhCwESI=",
+        "owner": "storytold",
+        "repo": "vectorcraft",
+        "rev": "e1599a16aaf2560bb22dccd43be21a281f220f96",
+        "type": "github"
+      },
+      "original": {
+        "owner": "storytold",
+        "repo": "vectorcraft",
+        "type": "github"
+      }
+    },
+    "wordcraft": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1791594152,
+        "narHash": "sha256-IBfOqEMpJy+FkIBVgtVsKYwRIqh86Tx2SUdt7I+2LdQ=",
+        "owner": "storytold",
+        "repo": "wordcraft",
+        "rev": "a1caf22a0b4faa4675a2d6dbcc24e0516b300e30",
+        "type": "github"
+      },
+      "original": {
+        "owner": "storytold",
+        "repo": "wordcraft",
+        "type": "github"
+      }
+    }
+  },
+  "root": "root",
+  "version": 7
+}

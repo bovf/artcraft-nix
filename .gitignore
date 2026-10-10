@@ -1,0 +1,11 @@
+result
+result-*
+.direnv/
+*.log
+__pycache__/
+.pytest_cache/
+graphify-out/
+.pi-subagents/
+.env
+.env.*
+!.env.example
