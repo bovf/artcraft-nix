@@ -114,3 +114,7 @@ Read [agent context](.agents/AGENTS.md) and the [all-app update workflow](.agent
 ## GitLab CI source mirrors
 
 On default-branch pushes, [GitLab CI](.gitlab-ci.yml) syncs the source branch to the configured GitHub and Codeberg mirrors using CI variables. It does not build packages, upload binaries or deploy anything.
+
+## Verified headless controls
+
+See the [pinned capability matrix](docs/capabilities.md) and [exact selected paths/revisions](docs/capabilities.json). Twelve native synthetic MCP operations are tested; ArtCraft remains install-only. No GUI/provider/redistribution claim is added.
