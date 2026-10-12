@@ -147,6 +147,17 @@ Also parse YAML to extract `mirror:main.script`, check the Bash syntax/ShellChec
 
 Stage `.gitlab-ci.yml` explicitly for an authorized CI change; the earlier migration's CI omission is historical, not a current prohibition. Do not add a duplicate `.gitlab-ci.yaml`. A feature push does not execute the default-branch-only job. A local green fixture or skipped destination is not a verified mirror; confirm live job logs and all three source SHAs only after approved merge and actual configured execution.
 
+## Linux file-dialog runtime
+
+The common Linux Rust wrappers supply D-Bus's client library and Zenity; keep
+these dependencies in `packages/craft.nix`, not per-consumer overlays or global
+session variables. Every Linux install check exercises the actual GUI/CLI
+wrapper environment with `tests/dialog-runtime.py`, without starting an app.
+Use the [isolated Open/Save procedure and limits](../docs/linux-file-dialogs.md)
+for representative GUI acceptance; wrapper checks alone do not certify a live
+Wayland session. Do not apply PhotoCraft's X11 preference or touch real files
+merely to validate packaging.
+
 ## Narrow changes and recovery
 
 For one requested app update, use `nix flake update NAME`, inspect its dependency/asset changes and build it, plus shared-font/toolchain affected apps where appropriate. Do not quietly turn it into an all-input refresh. Documentation-only changes still need valid relative links/commands, diff checks and redacted scans.

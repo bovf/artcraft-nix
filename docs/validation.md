@@ -1,6 +1,47 @@
 # Validation evidence and limits
 
-**Current release pins are untested.** The [2026-10-11 release update](releases-2026-10-11.md) ran no application builds, tests, flake checks, LSP diagnostics or GUI/native/editorial gates, at the operator's request. All passing evidence below refers to the preceding development revisions, not the current lock. The companion capability JSON is also retained as a historical snapshot.
+**Current release validation is partial.** The [2026-10-11 release update](releases-2026-10-11.md) originally ran no application builds/tests or acceptance gates, at the operator's request. The separately authorized Linux file-dialog follow-up below adds scoped current-release evidence, not full-suite/editorial acceptance. The companion capability JSON and the subsequent initial-acceptance sections remain historical snapshots.
+
+## Linux file-dialog follow-up (2026-10-12)
+
+The shared Linux Rust wrapper now exposes D-Bus's client library and Zenity for
+`rfd` 0.17.2. Application sources, release tags, fonts, toolchains, licences and
+both producer/consumer locks were preserved; Tauri ArtCraft is untouched.
+
+- PhotoCraft **0.7.0** and FilmCraft **0.6.0** were built from the changed recipe
+  with selected Cargo/unit and install checks. The new install check exercises
+  each real GUI/CLI wrapper environment; the preceding wrapper fails its
+  negative control. One upstream PhotoCraft test remains ignored.
+- Both genuinely built apps passed actual native **Open and Save As** through a
+  private GTK portal and, separately, the Zenity fallback with no portal
+  activation available. A 32×24 synthetic PNG was opened/saved with its dimensions
+  verified; a generated Film project retained its non-default display setting
+  through Open/Save and reopened successfully with the native CLI. Blank-window
+  rendering or `--version` alone was not treated as picker acceptance.
+- All **twelve** changed Linux recipes' post-install/wrapper checks passed in
+  runtime-only fixtures, reusing byte-identical baseline GUI/CLI ELF binaries
+  (24 wrappers). This validates the shared runtime change, **not** fresh Cargo
+  builds or all features of the other ten apps.
+- All three supported systems evaluated. Darwin package derivations are exactly
+  unchanged; all app source/version selections and ArtCraft derivations are
+  unchanged on every platform. ARM Linux remains evaluation-only.
+- Source contracts, Nix/Python formatting, whitespace and redacted changed-file
+  scans passed. The new Python check has clean Ruff/ty LSP diagnostics; nixd
+  reports two pre-existing `builtins.`-prefix style warnings, not errors.
+
+The GUI fixture used private filesystem/network/PID namespaces, HOME/XDG,
+synthetic passwd/group/machine identity, D-Bus, Xvfb and software Mesa. No live
+HOME/session/display sockets, credentials, network, user media or GPU/audio
+hardware was exposed. Fixture-only missing-user, event timing, chooser-extension
+and Save-As project-renaming assumptions were corrected and failed attempts
+retained; no desktop settings or app sources were changed to make tests pass.
+
+No live Niri/Wayland picker or native Wayland drag/drop, hardware, other ten apps'
+complete source builds, ArtCraft GUI, full native/editorial compatibility,
+publication, consumer adoption or system activation is certified. See
+[Linux file-dialog ownership and checks](linux-file-dialogs.md).
+
+## Historical initial acceptance
 
 Initial acceptance: **2026-10-10**, against this repository's locked inputs and package recipes. This is a snapshot, not a claim that moving upstream branches will stay latest. Repeat [the update/validation workflow](../.agents/workflows.md) after pin, compiler, recipe or consumer-nixpkgs changes.
 

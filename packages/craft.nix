@@ -15,7 +15,10 @@
   libxrandr,
   libxext,
   xdg-utils,
+  dbus,
+  zenity,
   ffmpeg,
+  python3,
   desktop-file-utils,
   fetchurl,
   runCommand,
@@ -27,7 +30,8 @@
   version = manifest.workspace.package.version;
   audio = builtins.elem pname ["soundcraft" "filmcraft" "effectcraft" "deckcraft"];
   multimedia = builtins.elem pname ["soundcraft" "filmcraft" "effectcraft" "deckcraft"];
-  runtimeLibraries = [libglvnd vulkan-loader wayland libxkbcommon libx11 libxcursor libxi libxrandr libxext];
+  # rfd 0.17 dlopens libdbus for portals, then falls back to Zenity.
+  runtimeLibraries = [dbus libglvnd vulkan-loader wayland libxkbcommon libx11 libxcursor libxi libxrandr libxext];
   commands = [pname "${pname}-cli"];
   cargoFlags = lib.concatMap (name: ["--package" name]) commands;
   appId = "ai.storyteller.${pname}";
@@ -79,7 +83,7 @@ in
         for command in ${lib.escapeShellArgs commands}; do
           wrapProgram "$out/bin/$command" \
             --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath runtimeLibraries} \
-            --prefix PATH : ${lib.makeBinPath ([xdg-utils] ++ lib.optional multimedia ffmpeg)}
+            --prefix PATH : ${lib.makeBinPath ([xdg-utils zenity] ++ lib.optional multimedia ffmpeg)}
         done
       ''
       + lib.optionalString (stdenv.hostPlatform.isDarwin && multimedia) ''
@@ -92,7 +96,7 @@ in
         cp -r ${pdfModels}/. "$out/share/pdfcraft/models/"
       '';
     doInstallCheck = true;
-    nativeInstallCheckInputs = lib.optionals stdenv.hostPlatform.isLinux [desktop-file-utils];
+    nativeInstallCheckInputs = lib.optionals stdenv.hostPlatform.isLinux [desktop-file-utils python3];
     installCheckPhase =
       ''
         runHook preInstallCheck
@@ -103,6 +107,7 @@ in
           desktop-file-validate "$out/share/applications/${appId}.desktop"
           test -f "$out/share/icons/hicolor/256x256/apps/${appId}.png"
           test -f "$out/share/mime/packages/${appId}.mime.xml"
+          python3 ${../tests/dialog-runtime.py} ${lib.getLib dbus}/lib ${lib.getExe zenity} "$out" ${pname}
         ''}
         runHook postInstallCheck
       ''
