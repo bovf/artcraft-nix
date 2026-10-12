@@ -1,5 +1,7 @@
 # Pinned Craft control capabilities
 
+**Historical evidence only:** the revisions and output paths below and in `capabilities.json` predate the [2026-10-11 release update](releases-2026-10-11.md). The new release pins have not been built or tested; these MCP/editorial results do not certify their compatibility.
+
 This matrix binds the selected producer app revisions and immutable GUI/CLI/store paths in [capabilities.json](capabilities.json). It is not a claim about mutable upstream HEAD. All thirteen installed Heavy executables matched these outputs; the starting consumer source/lock lacked the assumed ArtCraft input/selections, so that baseline discrepancy is explicit, not invented.
 
 Twelve **native x86_64 Linux** stdio servers passed initialize/list and a meaningful synthetic operation, including a final one-launcher run with read-only raw/root and isolated per-app writes. No GUI/hardware/provider/credential/live-setting or authenticated interaction is certified. ARM/Darwin remain evaluation-only; package metadata is not runtime acceptance. ArtCraft is install-only: no fake registration.
