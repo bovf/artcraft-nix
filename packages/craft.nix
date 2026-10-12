@@ -38,8 +38,7 @@
     (builtins.fromTOML (builtins.readFile "${src}/Cargo.lock")).package;
 in
   rustPlatform.buildRustPackage {
-    inherit pname src;
-    version = "${version}-unstable-${builtins.substring 0 7 src.rev}";
+    inherit pname src version;
     cargoLock = {
       lockFile = "${src}/Cargo.lock";
       # EffectCraft pins FilmCraft's native media crates at this exact commit.

@@ -12,7 +12,9 @@ Lock updates are a maintenance operation, **not** a generic test. Freeze the sel
 
 ## Update all applications
 
-This is the default workflow when asked to update the creative suite to the latest available versions. It updates **all thirteen** upstream default-branch pins, including non-free ArtCraft, and their shared font source. Application versions are read automatically from those snapshots. It does not silently switch from branches to release tags or use upstream's unpinned prebuilt binaries.
+This is the default workflow when asked to update the creative suite to the latest available versions. It updates **all thirteen** published release-tag pins, including non-free ArtCraft. Application versions are read automatically from the selected manifests. Query each upstream's latest non-draft, non-prerelease GitHub release and edit its URL in `flake.nix` before updating the lock. A newer development snapshot may be ahead of the latest release: ask before a downgrade. Shared fonts/toolchains are separate updates when needed. Do not silently switch back to branch snapshots or use unpinned prebuilt binaries.
+
+The operator requested the 2026-10-11 update **without tests/builds**. Only release metadata/source inspection, lock resolution and ArtCraft dependency-cache prefetching were performed. The normal validation/publishing steps below remain future work, not evidence for that branch.
 
 ### 1. Start from an accountable checkout
 
@@ -36,15 +38,15 @@ nix eval --json --no-write-lock-file .#packages.x86_64-linux \
 
 ### 2. Resolve all upstreams once
 
-Run these commands in Bash, from **this repository**, not a consumer flake:
+First edit all thirteen application input URLs to the selected release tags; locking the existing tag does not discover a newer release. Then run these commands in Bash, from **this repository**, not a consumer flake:
 
 ```bash
 apps=(photocraft artcraft lightcraft filmcraft pdfcraft vectorcraft effectcraft designcraft wordcraft cadcraft gridcraft deckcraft soundcraft)
-nix flake update "${apps[@]}" craft-fonts
+nix flake update "${apps[@]}"
 git diff -- flake.lock
 ```
 
-That is the all-app update, not just the default PhotoCraft or twelve free apps. Review each upstream's changes, manifests, MSRV/native requirements, desktop/assets, license/brand notices and Cargo/npm locks. Record changed and unchanged app revisions; unchanged input revisions are a valid “already latest” result. Do not claim permanently latest from a moving branch.
+That is the all-app update, not just the default PhotoCraft or twelve free apps. Refresh `craft-fonts` separately if required by the selected releases. Review each upstream's changes, manifests, MSRV/native requirements, desktop/assets, license/brand notices and Cargo/npm locks. Record changed and unchanged app revisions; unchanged input revisions are a valid “already latest” result. Do not claim permanently latest from a moving branch.
 
 Toolchain updates are separate, deliberate operations when requested or needed for the new sources:
 
@@ -65,7 +67,7 @@ The PDF compiler version is explicitly pinned in `packages/default.nix`; updatin
   ```
 
   Review the result, update the revision assertion/hash, then build the Cargo dependencies/EffectCraft to confirm that `fetchgit` has the same tree hash. Archive export rules/submodules can differ: only the successful fixed-output Cargo dependency build decides acceptance. Unknown git dependencies must fail until explicitly pinned; never enable unchecked builtin Git fetches.
-- **ArtCraft npm:** compare `frontend/package-lock.json`. If dependencies changed, temporarily set `npmDepsHash = lib.fakeHash` in `packages/artcraft.nix`, then run:
+- **ArtCraft npm:** compare `frontend/package-lock.json`. The pinned nixpkgs `prefetch-npm-deps` helper can fetch the new lockfile into a private directory; `nix hash path DIRECTORY` yields its cache SRI without application builds or tests. Use the recipe's fetcher format (currently `NPM_FETCHER_VERSION=1`) and bounded `NIX_BUILD_CORES=3`. Source fetches/hashes are not build acceptance. For a validated update, if dependencies changed, temporarily set `npmDepsHash = lib.fakeHash` in `packages/artcraft.nix`, then run:
 
   ```bash
   nix build --no-link --no-write-lock-file .#artcraft.frontend.npmDeps

@@ -23,7 +23,7 @@
     pname = "artcraft-frontend";
     inherit version src;
     sourceRoot = "source/frontend";
-    npmDepsHash = "sha256-MEfbgOH529EzHJDKm+m9c+OPCp9kUPcPKRnwUAW9RbM=";
+    npmDepsHash = "sha256-SFHNSKXd6geJ8qYSPSwZSnG+0wmMDVfbasOPWNyLr5A=";
     npmFlags = ["--ignore-scripts" "--legacy-peer-deps"];
     makeCacheWritable = true;
     meta.license = lib.licenses.unfree;
@@ -59,8 +59,7 @@
 in
   rustPlatform.buildRustPackage {
     pname = "artcraft";
-    inherit src;
-    version = "${version}-unstable-${builtins.substring 0 7 src.rev}";
+    inherit src version;
     cargoLock.lockFile = "${src}/Cargo.lock";
     cargoBuildFlags = ["--package" "artcraft"];
     cargoTestFlags = ["--package" "artcraft"];

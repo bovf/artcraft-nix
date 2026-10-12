@@ -8,55 +8,55 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
     photocraft = {
-      url = "github:storytold/photocraft";
+      url = "github:storytold/photocraft/v0.7.0";
       flake = false;
     };
     artcraft = {
-      url = "github:storytold/artcraft";
+      url = "github:storytold/artcraft/artcraft-v0.41.0";
       flake = false;
     };
     lightcraft = {
-      url = "github:storytold/lightcraft";
+      url = "github:storytold/lightcraft/v0.6.0";
       flake = false;
     };
     filmcraft = {
-      url = "github:storytold/filmcraft";
+      url = "github:storytold/filmcraft/v0.6.0";
       flake = false;
     };
     pdfcraft = {
-      url = "github:storytold/pdfcraft";
+      url = "github:storytold/pdfcraft/v0.6.0";
       flake = false;
     };
     vectorcraft = {
-      url = "github:storytold/vectorcraft";
+      url = "github:storytold/vectorcraft/v0.9.0";
       flake = false;
     };
     effectcraft = {
-      url = "github:storytold/effectcraft";
+      url = "github:storytold/effectcraft/v0.8.0";
       flake = false;
     };
     designcraft = {
-      url = "github:storytold/designcraft";
+      url = "github:storytold/designcraft/v0.6.0";
       flake = false;
     };
     wordcraft = {
-      url = "github:storytold/wordcraft";
+      url = "github:storytold/wordcraft/v0.5.0";
       flake = false;
     };
     cadcraft = {
-      url = "github:storytold/cadcraft";
+      url = "github:storytold/cadcraft/v0.5.0";
       flake = false;
     };
     gridcraft = {
-      url = "github:storytold/gridcraft";
+      url = "github:storytold/gridcraft/v0.5.0";
       flake = false;
     };
     deckcraft = {
-      url = "github:storytold/deckcraft";
+      url = "github:storytold/deckcraft/v0.5.0";
       flake = false;
     };
     soundcraft = {
-      url = "github:storytold/soundcraft";
+      url = "github:storytold/soundcraft/v0.5.0";
       flake = false;
     };
     craft-fonts = {

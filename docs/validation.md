@@ -1,5 +1,7 @@
 # Validation evidence and limits
 
+**Current release pins are untested.** The [2026-10-11 release update](releases-2026-10-11.md) ran no application builds, tests, flake checks, LSP diagnostics or GUI/native/editorial gates, at the operator's request. All passing evidence below refers to the preceding development revisions, not the current lock. The companion capability JSON is also retained as a historical snapshot.
+
 Initial acceptance: **2026-10-10**, against this repository's locked inputs and package recipes. This is a snapshot, not a claim that moving upstream branches will stay latest. Repeat [the update/validation workflow](../.agents/workflows.md) after pin, compiler, recipe or consumer-nixpkgs changes.
 
 ## Platform matrix
