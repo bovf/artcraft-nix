@@ -35,7 +35,12 @@
   commands = [pname "${pname}-cli"];
   cargoFlags = lib.concatMap (name: ["--package" name]) commands;
   appId = "ai.storyteller.${pname}";
-  filmGitHash = "sha256-WXiX4rF7zSwfu3yu9aNH2/xWYhAYFVX1rdrnccuTD7g=";
+  gitSourceHashes = {
+    "git+https://github.com/storytold/filmcraft?rev=2c5ba7a72619935f0481f99d59409e0d1844b234#2c5ba7a72619935f0481f99d59409e0d1844b234" = "sha256-WXiX4rF7zSwfu3yu9aNH2/xWYhAYFVX1rdrnccuTD7g=";
+    "git+https://github.com/storytold/craft-libs?rev=5c874d51eeb3de70e735c8ce87a59a7dedd47675#5c874d51eeb3de70e735c8ce87a59a7dedd47675" = "sha256-VhLeT7VLdZAIz6gR9PdFI34IJxHsGF8NE0uzFCN2vIU=";
+    "git+https://github.com/storytold/craft-libs?rev=d991bf6792f8ade99c51358bf3c1d902c8cd96b5#d991bf6792f8ade99c51358bf3c1d902c8cd96b5" = "sha256-J/EJJeDDWXc+QQtpUqnAKKA4piOdPRbH3uG1ms2BRgY=";
+    "git+https://github.com/storytold/craft-libs?rev=d27646a5f7c8b4fc85d9dd3213b8c88b58e0088d#d27646a5f7c8b4fc85d9dd3213b8c88b58e0088d" = "sha256-u2AR5YZZSRzhWaevgR2S/jofD99J3YWKJA+CktUJbRY=";
+  };
   pdfModels = import ./pdf-models.nix {inherit lib fetchurl runCommand src;};
   gitPackages =
     builtins.filter (p: lib.hasPrefix "git+" (p.source or ""))
@@ -45,10 +50,10 @@ in
     inherit pname src version;
     cargoLock = {
       lockFile = "${src}/Cargo.lock";
-      # EffectCraft pins FilmCraft's native media crates at this exact commit.
+      # Exact FilmCraft/craft-libs sources only; unknown Git dependencies fail closed.
       outputHashes = lib.listToAttrs (map (p: {
           name = "${p.name}-${p.version}";
-          value = assert lib.hasInfix "2c5ba7a72619935f0481f99d59409e0d1844b234" p.source; filmGitHash;
+          value = assert builtins.hasAttr p.source gitSourceHashes; gitSourceHashes.${p.source};
         })
         gitPackages);
     };

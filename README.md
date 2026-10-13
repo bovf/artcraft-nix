@@ -2,7 +2,7 @@
 
 Standalone, revision-pinned Nix source packages for the [Storytold](https://github.com/storytold) creative applications. Import this flake from NixOS, Home Manager or another flake, without depending on `pl-badwater`.
 
-This is independent packaging, not an official or endorsed ArtCraft release. Development is hosted on [our GitLab](https://gitlab.dobryops.com/nix/artcraft-nix). GitLab CI is configured for default-branch source mirrors to GitHub/Codeberg; destination repositories are created manually. Mirror execution/parity is not yet verified, and downstream synchronization is not configured.
+This is independent packaging, not an official or endorsed ArtCraft release. Development is hosted on [our GitLab](https://gitlab.dobryops.com/nix/artcraft-nix). GitLab CI is configured for default-branch source mirrors to GitHub/Codeberg; destination repositories are created manually. Canonical GitLab main has verified source-only GitHub/Codeberg mirrors; consumers refresh their immutable input pin separately.
 
 ## Packages
 
@@ -24,7 +24,7 @@ This is independent packaging, not an official or endorsed ArtCraft release. Dev
 
 Every named package builds from its locked upstream source and Cargo lockfile. The twelve native Rust/egui packages install both commands, upstream Linux desktop entries/icons/MIME definitions and required dynamic-library wrappers. Audio packages link ALSA on Linux; multimedia packages include FFmpeg in their command search path. Linux wrappers also expose the D-Bus client library for `rfd` file dialogs and Zenity for its fallback. The host still supplies the desktop portal/session; see [Linux file dialogs](docs/linux-file-dialogs.md). Shared `craft-fonts` is a pinned compile-time input, with font attribution and OFL notices installed alongside the code licenses.
 
-All thirteen application inputs select explicit published release tags; their resolved revisions, fonts, nixpkgs and `rust-overlay` are pinned in `flake.lock`. Package versions come from those release manifests. There are no `latest` binary downloads or first-launch build scripts. The [2026-10-11 release update](docs/releases-2026-10-11.md) originally skipped tests, as requested; a separately authorized [Linux file-dialog follow-up](docs/validation.md#linux-file-dialog-follow-up-2026-10-12) validates the shared runtime and representative PhotoCraft/FilmCraft releases, not the full suite. ArtCraft 0.41.0 intentionally replaces the newer 0.42.0 development snapshot. PDFCraft includes the upstream default English OCR models and their CC-BY-SA-4.0 notices, fetched against upstream's SHA-256 values. Other optional features remain at upstream defaults. ArtCraft builds its frontend separately from its Rust backend.
+All thirteen application inputs select explicit published release tags; their resolved revisions, fonts, nixpkgs and `rust-overlay` are pinned in `flake.lock`. Package versions come from those release manifests. There are no `latest` binary downloads or first-launch build scripts. The [2026-10-13 release update](docs/releases-2026-10-13.md) advances all twelve native apps; ArtCraft remains at the latest published 0.41.0. Only lightweight source/evaluation checks were requested: these new applications have not been built or runtime-tested. The [Linux file-dialog follow-up](docs/validation.md#linux-file-dialog-follow-up-2026-10-12) is historical evidence for preceding PhotoCraft/FilmCraft releases, not acceptance of these pins. PDFCraft includes the upstream default English OCR models and their CC-BY-SA-4.0 notices, fetched against upstream's SHA-256 values. Other optional features remain at upstream defaults. ArtCraft builds its frontend separately from its Rust backend.
 
 ## Build and run locally
 
@@ -44,12 +44,12 @@ The previous development snapshots completed native x86_64 Linux builds, configu
 
 ## Import into another flake
 
-Use Git over SSH for the private GitLab repository; readers need GitLab access. Until the packaging branch is merged, select `feat/migrate-artcraft-suite` as below; remove the `?ref=…` selection once the accepted flake is on the default branch. Future public mirrors can replace only the input URL once verified.
+Use the verified GitHub main source mirror below, or Git over SSH to canonical GitLab. `flake.lock` selects the immutable source snapshot; refresh it explicitly after an authorized producer update.
 
 ```nix
 {
   inputs.nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
-  inputs.artcraft-nix.url = "git+ssh://git@gitlab.dobryops.com/nix/artcraft-nix.git?ref=feat/migrate-artcraft-suite";
+  inputs.artcraft-nix.url = "github:bovf/artcraft-nix/main";
 
   outputs = { self, nixpkgs, artcraft-nix, ... }: {
     nixosConfigurations.myhost = nixpkgs.lib.nixosSystem {
@@ -109,7 +109,7 @@ nix flake update craft-fonts
 nix flake update nixpkgs rust-overlay
 ```
 
-After source updates, inspect the upstream manifests/licenses, build the affected package and re-run checks before publishing the lock change. EffectCraft's locked FilmCraft git dependency has an explicit content hash in `packages/craft.nix`; if that dependency changes, prefetch the new exact revision and update the hash, never use an unchecked git fetch. ArtCraft's npm cache hash must be recomputed when its frontend lock changes. The pinned nixpkgs `prefetch-npm-deps` helper can fetch that cache without building or testing an application.
+After source updates, inspect the upstream manifests/licenses, build the affected package and re-run checks before publishing the lock change. The exact FilmCraft and craft-libs Git sources have explicit content hashes in `packages/craft.nix`; when dependencies change, verify their exact trees and update the map, never enable unchecked Git fetches. ArtCraft's npm cache hash must be recomputed when its frontend lock changes. The pinned nixpkgs `prefetch-npm-deps` helper can fetch that cache without building or testing an application.
 
 Read [agent context](.agents/AGENTS.md) and the [all-app update workflow](.agents/workflows.md#update-all-applications) for the full procedure, dependency hash/model/compiler handling, validation and publishing safeguards. “Latest release” means GitHub's latest non-draft, non-prerelease publication at selection time. Edit the explicit tag URLs before locking a newer release; `nix flake update` alone does not advance a fixed tag. Development snapshots require an explicit choice, especially if newer than the latest published release.
 

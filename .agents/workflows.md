@@ -14,6 +14,8 @@ Lock updates are a maintenance operation, **not** a generic test. Freeze the sel
 
 This is the default workflow when asked to update the creative suite to the latest available versions. It updates **all thirteen** published release-tag pins, including non-free ArtCraft. Application versions are read automatically from the selected manifests. Query each upstream's latest non-draft, non-prerelease GitHub release and edit its URL in `flake.nix` before updating the lock. A newer development snapshot may be ahead of the latest release: ask before a downgrade. Shared fonts/toolchains are separate updates when needed. Do not silently switch back to branch snapshots or use unpinned prebuilt binaries.
 
+The 2026-10-13 operator requested a lightweight release update: source/hash checks, formatting, existing source-contract and evaluation only, with no full application/GUI build matrix. The producer is published to canonical main; the consumer's pin is left uncommitted for the operator's own build/testing/push/merge. See [selected releases and exact limits](../docs/releases-2026-10-13.md).
+
 The operator requested the 2026-10-11 update **without tests/builds**. Only release metadata/source inspection, lock resolution and ArtCraft dependency-cache prefetching were performed. The normal validation/publishing steps below remain future work, not evidence for that branch.
 
 ### 1. Start from an accountable checkout
@@ -59,7 +61,7 @@ The PDF compiler version is explicitly pinned in `packages/default.nix`; updatin
 ### 3. Reconcile dependency and asset hashes
 
 - **Cargo registries:** import the new upstream `Cargo.lock`; checksum failures require investigation, not weakening verification or deleting the lock.
-- **Cargo git dependencies:** `packages/craft.nix` currently accepts EffectCraft's FilmCraft commit `2c5ba7a72619935f0481f99d59409e0d1844b234`. Compare every git source in the new lock. For a changed revision, use its exact public source to prefetch the unpacked tree:
+- **Cargo git dependencies:** `packages/craft.nix` maps exact full Git source strings to verified hashes for EffectCraft's FilmCraft commit `2c5ba7a72619935f0481f99d59409e0d1844b234` and the three craft-libs revisions selected by current app locks. Compare every git source in the new lock; unlisted strings must fail. For a changed revision, use its exact public source to prefetch the unpacked tree:
 
   ```bash
   nix store prefetch-file --unpack --json \

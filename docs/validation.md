@@ -1,6 +1,8 @@
 # Validation evidence and limits
 
-**Current release validation is partial.** The [2026-10-11 release update](releases-2026-10-11.md) originally ran no application builds/tests or acceptance gates, at the operator's request. The separately authorized Linux file-dialog follow-up below adds scoped current-release evidence, not full-suite/editorial acceptance. The companion capability JSON and the subsequent initial-acceptance sections remain historical snapshots.
+**Current release validation is source/evaluation-only.** The [2026-10-13 release update](releases-2026-10-13.md) advances twelve apps, preserving ArtCraft0.41.0, fonts/toolchains/OCR models and the Linux runtime fix. Existing source contracts and three fixed-output craft-libs source fetches passed; no application/frontend builds or runtime/editorial/hardware acceptance were requested. Do not relabel earlier GUI/build receipts as acceptance of these new pins.
+
+**Preceding release validation was partial.** The [2026-10-11 release update](releases-2026-10-11.md) originally ran no application builds/tests or acceptance gates, at the operator's request. The separately authorized Linux file-dialog follow-up below adds scoped current-release evidence, not full-suite/editorial acceptance. The companion capability JSON and the subsequent initial-acceptance sections remain historical snapshots.
 
 ## Linux file-dialog follow-up (2026-10-12)
 
