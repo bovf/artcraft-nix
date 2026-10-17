@@ -26,6 +26,12 @@ Every named package builds from its locked upstream source and Cargo lockfile. T
 
 All thirteen application inputs select explicit published release tags; their resolved revisions, fonts, nixpkgs and `rust-overlay` are pinned in `flake.lock`. Package versions come from those release manifests. There are no `latest` binary downloads or first-launch build scripts. The [2026-10-18 release update](docs/releases-2026-10-18.md) advances all twelve native apps again; ArtCraft remains at the latest published 0.41.0. Only lightweight source/evaluation checks were requested: these new applications have not been built or runtime-tested. The [Linux file-dialog follow-up](docs/validation.md#linux-file-dialog-follow-up-2026-10-12) is historical evidence for preceding PhotoCraft/FilmCraft releases, not acceptance of these pins. PDFCraft includes the upstream default English OCR models and their CC-BY-SA-4.0 notices, fetched against upstream's SHA-256 values. Other optional features remain at upstream defaults. ArtCraft builds its frontend separately from its Rust backend.
 
+FilmCraft0.8.0 has a narrowly scoped source patch for its opt-in development desktop
+entry: its MIME field now matches the existing packaged launcher. The original
+consistency test stays enabled; all six helper-module tests pass in isolation.
+This is not a full new application/GUI build claim. See the
+[desktop-entry repair evidence](docs/validation.md#filmcraft-desktop-entry-repair).
+
 ## Build and run locally
 
 Requires Nix with `nix-command` and `flakes` enabled. Source builds are substantial; keep parallel jobs bounded on machines with limited RAM.

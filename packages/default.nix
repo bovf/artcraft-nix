@@ -19,7 +19,11 @@
 in {
   photocraft = craft "photocraft";
   lightcraft = craft "lightcraft";
-  filmcraft = craft "filmcraft";
+  filmcraft = (craft "filmcraft").overrideAttrs (old: {
+    # 0.8.0's opt-in dev launcher omits the packaged desktop entry's MIME field.
+    patches = (old.patches or []) ++ [./filmcraft-desktop-mime.patch];
+    patchFlags = (old.patchFlags or ["-p1"]) ++ ["--fuzz=0"];
+  });
   pdfcraft = craft "pdfcraft";
   vectorcraft = craft "vectorcraft";
   effectcraft = craft "effectcraft";

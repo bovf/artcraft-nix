@@ -123,3 +123,30 @@ See [all13 selected releases, exact new Git hashes and limits](releases-2026-10-
 Only source/hash/contracts/format/evaluation were requested and performed for
 these releases. Previous application/GUI receipts are historical, not acceptance
 of the new pins. Local consumer rebuild/runtime checking remains operator-owned.
+
+## FilmCraft desktop entry repair
+
+The consumer's first FilmCraft0.8.0 build compiled successfully but failed
+`dev_icon::tests::desktop_file_matches_the_packaged_fields` (74 other binary
+tests passed). The packaged desktop entry already declares project/video MIME
+types; the opt-in source-tree launcher omitted that exact field. Preserve the
+packaged declaration and test, not a test skip or shortened MIME list.
+
+`packages/filmcraft-desktop-mime.patch` adds the missing single Rust string line
+and is wired only to FilmCraft in `packages/default.nix`, with zero-fuzz patching.
+Retire it when the released upstream helper already matches its packaged entry.
+No source pin/version, Cargo lock/vendor data, compiler/font/model pin, runtime
+wrapper, dialog behavior or installed desktop file is changed.
+
+Lightweight reproduction uses the actual complete `dev_icon.rs`, actual APP_ID,
+producer Rust1.98.1 and the exact vendored log0.4.34 crate. It runs the module's
+six unmodified Rust tests in a private filesystem/network namespace: unpatched
+source fails the same assertion (5 passed/1 failed); patched source passes6/6.
+The actual recipe patch list materializes exactly those tested source bytes.
+The other12 producer derivation identities and all13 versions are unchanged.
+All-platform evaluation, source contract, formatting and source scans pass.
+
+The full FilmCraft/Cargo/GUI/system rebuild remains operator-owned, as requested.
+These source-bound helper tests do not claim a rerun of all75 binary tests,
+real file dialogs, hardware decoding or physical desktop behavior. Standard
+`doCheck`, GUI+CLI cargo test flags and install checks remain enabled.
