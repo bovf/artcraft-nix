@@ -116,3 +116,10 @@ No live GitLab pipeline execution, mirror parity or external repository creation
 ## Native editorial interoperability
 
 The unchanged pinned FilmCraft/SoundCraft/EffectCraft outputs are exercised by pi-nix's synthetic editorial gate: genuine native vertical motion/crop and layered placement, native linked retiming, selected stereo Sound cuts with gain/duck automation and save/reopen/bounce, native timed/keyframed text, transparent ProRes4444 RGBA export, Film import/composition/save/reopen/H264+AAC export. Independent output-pixel checks verify caption presence, unoccluded underlying corner and absence outside the effect interval, alongside native composite QC. These tests do not certify every codec/effect, hardware/GUI, long recordings, artistic quality or providers. App versions/toolchains/fonts/licences remain unchanged; no speculative app-source patch was needed.
+
+## Lightweight release refresh — 2026-10-18
+
+See [all13 selected releases, exact new Git hashes and limits](releases-2026-10-18.md).
+Only source/hash/contracts/format/evaluation were requested and performed for
+these releases. Previous application/GUI receipts are historical, not acceptance
+of the new pins. Local consumer rebuild/runtime checking remains operator-owned.

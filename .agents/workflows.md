@@ -14,6 +14,11 @@ Lock updates are a maintenance operation, **not** a generic test. Freeze the sel
 
 This is the default workflow when asked to update the creative suite to the latest available versions. It updates **all thirteen** published release-tag pins, including non-free ArtCraft. Application versions are read automatically from the selected manifests. Query each upstream's latest non-draft, non-prerelease GitHub release and edit its URL in `flake.nix` before updating the lock. A newer development snapshot may be ahead of the latest release: ask before a downgrade. Shared fonts/toolchains are separate updates when needed. Do not silently switch back to branch snapshots or use unpinned prebuilt binaries.
 
+The 2026-10-18 operator again requested lightweight source/hash/evaluation checks,
+not application/GUI builds. Owner main and mirror publication plus the consumer
+lock commit/push are approved; the operator will perform local rebuilds. See
+[the frozen release snapshot and limits](../docs/releases-2026-10-18.md).
+
 The 2026-10-13 operator requested a lightweight release update: source/hash checks, formatting, existing source-contract and evaluation only, with no full application/GUI build matrix. The producer is published to canonical main; the consumer's pin is left uncommitted for the operator's own build/testing/push/merge. See [selected releases and exact limits](../docs/releases-2026-10-13.md).
 
 The operator requested the 2026-10-11 update **without tests/builds**. Only release metadata/source inspection, lock resolution and ArtCraft dependency-cache prefetching were performed. The normal validation/publishing steps below remain future work, not evidence for that branch.

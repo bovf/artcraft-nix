@@ -36,6 +36,13 @@
   cargoFlags = lib.concatMap (name: ["--package" name]) commands;
   appId = "ai.storyteller.${pname}";
   gitSourceHashes = {
+    "git+https://github.com/skylartaylor/winit.git?rev=3d51077fd1a966f84df9ef287839dc84fd5b4ca7#3d51077fd1a966f84df9ef287839dc84fd5b4ca7" = "sha256-q1gDwAj8xU/2OC4CtCG72ZvrkZ436V3zsqh5hovLTcs=";
+    "git+https://github.com/storytold/craft-libs?rev=3d37da389a3618ab9b76109da11416e9ca4ea719#3d37da389a3618ab9b76109da11416e9ca4ea719" = "sha256-uXP0zITi8i1JDUyc451FmZ0Pl1ZK4D0rlTJQmGFVm0I=";
+    "git+https://github.com/storytold/craft-libs?rev=ca50d63b773c99f96e75c77ce5a1d21e7c9cda0d#ca50d63b773c99f96e75c77ce5a1d21e7c9cda0d" = "sha256-6r1iIlwK6HlUkascw0e4R9L2H5WMgKO2y6PEa51Flws=";
+    "git+https://github.com/storytold/craft-libs?rev=f03ec27ab2c405969428512178f746183cd55ca0#f03ec27ab2c405969428512178f746183cd55ca0" = "sha256-QtSjPVQSYsqqmg/9mtfC4ueAFcZ3IcL4gb29B+BfgmY=";
+    "git+https://github.com/storytold/pdfcraft?rev=b5467d93a0ffaa5e5e6658bccdf8655a3ba689c9#b5467d93a0ffaa5e5e6658bccdf8655a3ba689c9" = "sha256-xGbwY2SCjT1QTwVczSm3kSOxpweYfjd/2zgGk7EhqCE=";
+    "git+https://github.com/storytold/winprint.rs?rev=417ac3c4d14d3da5485a99c7d5ce8f05664ec312#417ac3c4d14d3da5485a99c7d5ce8f05664ec312" = "sha256-n1pcNaBGrnvSsE5MedeSRczJOMhfmF/LGFiiDTrG1GM=";
+    "git+https://github.com/storytold/winprint.rs?rev=5f80b9baf6b58937c401656634e42d33f00ddf49#5f80b9baf6b58937c401656634e42d33f00ddf49" = "sha256-wnz/VbqQ3j/x1PEq6Elxu/oSjVqdONfqQmZ31NsTIIc=";
     "git+https://github.com/storytold/filmcraft?rev=2c5ba7a72619935f0481f99d59409e0d1844b234#2c5ba7a72619935f0481f99d59409e0d1844b234" = "sha256-WXiX4rF7zSwfu3yu9aNH2/xWYhAYFVX1rdrnccuTD7g=";
     "git+https://github.com/storytold/craft-libs?rev=5c874d51eeb3de70e735c8ce87a59a7dedd47675#5c874d51eeb3de70e735c8ce87a59a7dedd47675" = "sha256-VhLeT7VLdZAIz6gR9PdFI34IJxHsGF8NE0uzFCN2vIU=";
     "git+https://github.com/storytold/craft-libs?rev=d991bf6792f8ade99c51358bf3c1d902c8cd96b5#d991bf6792f8ade99c51358bf3c1d902c8cd96b5" = "sha256-J/EJJeDDWXc+QQtpUqnAKKA4piOdPRbH3uG1ms2BRgY=";
