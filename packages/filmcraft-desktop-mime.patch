@@ -1,9 +1,0 @@
-diff --git a/apps/filmcraft/src/dev_icon.rs b/apps/filmcraft/src/dev_icon.rs
---- a/apps/filmcraft/src/dev_icon.rs
-+++ b/apps/filmcraft/src/dev_icon.rs
-@@ -216,4 +216,5 @@
-     out.push_str(&format!("StartupWMClass={app_id}\n"));
-     out.push_str("Categories=AudioVideo;Video;AudioVideoEditing;\n");
-+    out.push_str("MimeType=application/x-filmcraft;video/mp4;video/x-m4v;video/quicktime;video/x-matroska;video/webm;video/vnd.avi;video/x-msvideo;application/mxf;video/mp2t;video/mpeg;video/3gpp;\n");
-     out.push_str("Keywords=video;editor;film;timeline;color;grading;nle;\n");
-     out

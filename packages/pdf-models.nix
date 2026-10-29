@@ -19,12 +19,12 @@
     };
   in
     assert model.licence == "CC-BY-SA-4.0";
-    assert builtins.match "[A-Za-z0-9._-]+\\.rten" model.file != null; ''
+    assert builtins.elem model.file ["text-detection.onnx" "text-recognition.onnx"]; ''
       install -Dm444 ${data} "$out/${model.file}"
       install -Dm444 ${notice} "$out/${model.file}.LICENCE.txt"
     '';
 in
-  assert models != [];
+  assert builtins.sort builtins.lessThan (map (model: model.file) models) == ["text-detection.onnx" "text-recognition.onnx"];
     runCommand "pdfcraft-ocr-models" {
       meta.license = lib.licenses.cc-by-sa-40;
     } ''

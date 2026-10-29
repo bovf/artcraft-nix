@@ -1,6 +1,6 @@
 # Validation evidence and limits
 
-**Current release validation is source/evaluation-only.** The [2026-10-13 release update](releases-2026-10-13.md) advances twelve apps, preserving ArtCraft0.41.0, fonts/toolchains/OCR models and the Linux runtime fix. Existing source contracts and three fixed-output craft-libs source fetches passed; no application/frontend builds or runtime/editorial/hardware acceptance were requested. Do not relabel earlier GUI/build receipts as acceptance of these new pins.
+**Current release validation is source/evaluation-only.** The [2026-10-29 entire-flake update](releases-2026-10-29.md) advances twelve apps, fonts, nixpkgs and rust-overlay, retaining latest ArtCraft0.41.0 and the Linux dialog wrappers. Five changed Cargo Git trees and the official PDF ONNX model pair are source-fetch/hash verified. All65 font manifest faces, all13 source contracts and all supported platforms are checked. FilmCraft's upstream MIME fix retires the old patch with6/6 unmodified isolated helper tests. The new nixpkgs Rust1.99/LLVM21 still fails the compile-only AVX512 probe; official1.98.1 passes, justifying the retained PDF exception. No application/frontend/full-vendor/GUI/editorial/hardware acceptance is claimed. Earlier application build/GUI receipts are historical and must not be reused for these new derivations.
 
 **Preceding release validation was partial.** The [2026-10-11 release update](releases-2026-10-11.md) originally ran no application builds/tests or acceptance gates, at the operator's request. The separately authorized Linux file-dialog follow-up below adds scoped current-release evidence, not full-suite/editorial acceptance. The companion capability JSON and the subsequent initial-acceptance sections remain historical snapshots.
 
@@ -113,9 +113,9 @@ The initial migration omitted CI. The operator subsequently authorized a `pi-nix
 
 No live GitLab pipeline execution, mirror parity or external repository creation is asserted. Only source packaging/context is mirrored; no application binaries/cache or downstream deployment is configured. ArtCraft binary redistribution still requires confirmed upstream permission.
 
-## Native editorial interoperability
+## Historical native editorial interoperability
 
-The unchanged pinned FilmCraft/SoundCraft/EffectCraft outputs are exercised by pi-nix's synthetic editorial gate: genuine native vertical motion/crop and layered placement, native linked retiming, selected stereo Sound cuts with gain/duck automation and save/reopen/bounce, native timed/keyframed text, transparent ProRes4444 RGBA export, Film import/composition/save/reopen/H264+AAC export. Independent output-pixel checks verify caption presence, unoccluded underlying corner and absence outside the effect interval, alongside native composite QC. These tests do not certify every codec/effect, hardware/GUI, long recordings, artistic quality or providers. App versions/toolchains/fonts/licences remain unchanged; no speculative app-source patch was needed.
+The preceding FilmCraft/SoundCraft/EffectCraft outputs were exercised by pi-nix's synthetic editorial gate: genuine native vertical motion/crop and layered placement, native linked retiming, selected stereo Sound cuts with gain/duck automation and save/reopen/bounce, native timed/keyframed text, transparent ProRes4444 RGBA export, Film import/composition/save/reopen/H264+AAC export. Independent output-pixel checks verify caption presence, unoccluded underlying corner and absence outside the effect interval, alongside native composite QC. These tests do not certify every codec/effect, hardware/GUI, long recordings, artistic quality or providers. During that historical gate, app versions/toolchains/fonts/licences remained unchanged; no speculative app-source patch was needed.
 
 ## Lightweight release refresh — 2026-10-18
 
@@ -125,6 +125,11 @@ these releases. Previous application/GUI receipts are historical, not acceptance
 of the new pins. Local consumer rebuild/runtime checking remains operator-owned.
 
 ## FilmCraft desktop entry repair
+
+**Historical0.8.0 repair, retired in the current0.14.0 selection:** the released
+helper now contains the exact MIME declaration itself. Its six unmodified tests
+pass in isolation; the source contract checks the released helper against the
+packaged entry. See [current retirement proof](releases-2026-10-29.md#filmcraft-patch-retirement-upstream-proof).
 
 The consumer's first FilmCraft0.8.0 build compiled successfully but failed
 `dev_icon::tests::desktop_file_matches_the_packaged_fields` (74 other binary

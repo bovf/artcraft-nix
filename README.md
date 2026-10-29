@@ -24,13 +24,16 @@ This is independent packaging, not an official or endorsed ArtCraft release. Dev
 
 Every named package builds from its locked upstream source and Cargo lockfile. The twelve native Rust/egui packages install both commands, upstream Linux desktop entries/icons/MIME definitions and required dynamic-library wrappers. Audio packages link ALSA on Linux; multimedia packages include FFmpeg in their command search path. Linux wrappers also expose the D-Bus client library for `rfd` file dialogs and Zenity for its fallback. The host still supplies the desktop portal/session; see [Linux file dialogs](docs/linux-file-dialogs.md). Shared `craft-fonts` is a pinned compile-time input, with font attribution and OFL notices installed alongside the code licenses.
 
-All thirteen application inputs select explicit published release tags; their resolved revisions, fonts, nixpkgs and `rust-overlay` are pinned in `flake.lock`. Package versions come from those release manifests. There are no `latest` binary downloads or first-launch build scripts. The [2026-10-18 release update](docs/releases-2026-10-18.md) advances all twelve native apps again; ArtCraft remains at the latest published 0.41.0. Only lightweight source/evaluation checks were requested: these new applications have not been built or runtime-tested. The [Linux file-dialog follow-up](docs/validation.md#linux-file-dialog-follow-up-2026-10-12) is historical evidence for preceding PhotoCraft/FilmCraft releases, not acceptance of these pins. PDFCraft includes the upstream default English OCR models and their CC-BY-SA-4.0 notices, fetched against upstream's SHA-256 values. Other optional features remain at upstream defaults. ArtCraft builds its frontend separately from its Rust backend.
+All thirteen application inputs select explicit published release tags; their resolved revisions, fonts, nixpkgs and `rust-overlay` are pinned in `flake.lock`. Package versions come from those release manifests. The recipes use no `latest` binary downloads or first-launch build scripts. The [2026-10-29 entire-flake update](docs/releases-2026-10-29.md) advances all twelve native apps, shared fonts, nixpkgs and rust-overlay; ArtCraft remains at the latest published 0.41.0. Only lightweight source/evaluation checks were requested: these new applications have not been built or runtime-tested. The [Linux file-dialog follow-up](docs/validation.md#linux-file-dialog-follow-up-2026-10-12) is historical evidence for preceding PhotoCraft/FilmCraft releases, not acceptance of these pins. PDFCraft includes the upstream default English OCR models and their CC-BY-SA-4.0 notices, fetched against upstream's SHA-256 values. Other optional features remain at upstream defaults. ArtCraft builds its frontend separately from its Rust backend.
 
-FilmCraft0.8.0 has a narrowly scoped source patch for its opt-in development desktop
-entry: its MIME field now matches the existing packaged launcher. The original
-consistency test stays enabled; all six helper-module tests pass in isolation.
-This is not a full new application/GUI build claim. See the
-[desktop-entry repair evidence](docs/validation.md#filmcraft-desktop-entry-repair).
+FilmCraft0.14.0 fixes its development desktop MIME field upstream, so the obsolete
+0.8.0 patch is retired. All six unmodified helper-module tests pass in isolation;
+the source contract guards the upstream MIME consistency. PDFCraft0.15.0 follows
+upstream's official ONNX OCR model migration with verified hashes and unchanged
+CC-BY-SA notices. Neither is a new application/GUI acceptance claim. See the
+[current source evidence and limits](docs/releases-2026-10-29.md). New native releases
+include upstream self-update prompts; these are not a Nix update path and were not
+exercised. Update the producer pins and rebuild instead of replacing store binaries.
 
 ## Build and run locally
 
@@ -82,7 +85,7 @@ nixpkgs.overlays = [ inputs.artcraft-nix.overlays.default ];
 environment.systemPackages = [ pkgs.photocraft pkgs.soundcraft ];
 ```
 
-The overlay uses the consumer's packages and toolchain, except PDFCraft's explicitly paired official Rust 1.98.1 compiler/std. This avoids a reproduced AVX512 intrinsic mismatch in nixpkgs's LLVM 21 build, without patching the app or altering host drivers. Following another nixpkgs revision is optional:
+The overlay uses the consumer's packages and toolchain, except PDFCraft's explicitly paired official Rust 1.98.1 compiler/std. This avoids an AVX512 intrinsic mismatch reproduced again with the updated nixpkgs Rust1.99.0/LLVM21 build, without patching the app or altering host drivers. Following another nixpkgs revision is optional:
 
 ```nix
 inputs.artcraft-nix.inputs.nixpkgs.follows = "nixpkgs";
@@ -115,7 +118,7 @@ nix flake update craft-fonts
 nix flake update nixpkgs rust-overlay
 ```
 
-After source updates, inspect the upstream manifests/licenses, build the affected package and re-run checks before publishing the lock change. The exact FilmCraft and craft-libs Git sources have explicit content hashes in `packages/craft.nix`; when dependencies change, verify their exact trees and update the map, never enable unchecked Git fetches. ArtCraft's npm cache hash must be recomputed when its frontend lock changes. The pinned nixpkgs `prefetch-npm-deps` helper can fetch that cache without building or testing an application.
+After source updates, inspect the upstream manifests/licenses, build the affected package and re-run checks before publishing the lock change. Every exact Cargo Git source (including craft-libs, egui/winit forks and INDD) has an explicit verified content hash in `packages/craft.nix`; when dependencies change, verify their exact trees and update the map, never enable unchecked Git fetches. ArtCraft's npm cache hash must be recomputed when its frontend lock changes. The pinned nixpkgs `prefetch-npm-deps` helper can fetch that cache without building or testing an application.
 
 Read [agent context](.agents/AGENTS.md) and the [all-app update workflow](.agents/workflows.md#update-all-applications) for the full procedure, dependency hash/model/compiler handling, validation and publishing safeguards. “Latest release” means GitHub's latest non-draft, non-prerelease publication at selection time. Edit the explicit tag URLs before locking a newer release; `nix flake update` alone does not advance a fixed tag. Development snapshots require an explicit choice, especially if newer than the latest published release.
 

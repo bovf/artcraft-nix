@@ -9,7 +9,7 @@
         fonts = inputs.craft-fonts;
       }
       // pkgs.lib.optionalAttrs (name == "pdfcraft") {
-        # nixpkgs Rust 1.98.1/LLVM 21 rejects RTen's AVX512 intrinsic.
+        # nixpkgs Rust 1.99.0/LLVM 21 still rejects RTen's AVX512 intrinsic.
         # Keep upstream source intact; use the paired official compiler/std instead.
         rustPlatform = pkgs.makeRustPlatform {
           cargo = pkgs.rust-bin.stable."1.98.1".minimal;
@@ -19,11 +19,7 @@
 in {
   photocraft = craft "photocraft";
   lightcraft = craft "lightcraft";
-  filmcraft = (craft "filmcraft").overrideAttrs (old: {
-    # 0.8.0's opt-in dev launcher omits the packaged desktop entry's MIME field.
-    patches = (old.patches or []) ++ [./filmcraft-desktop-mime.patch];
-    patchFlags = (old.patchFlags or ["-p1"]) ++ ["--fuzz=0"];
-  });
+  filmcraft = craft "filmcraft";
   pdfcraft = craft "pdfcraft";
   vectorcraft = craft "vectorcraft";
   effectcraft = craft "effectcraft";

@@ -14,6 +14,18 @@ Lock updates are a maintenance operation, **not** a generic test. Freeze the sel
 
 This is the default workflow when asked to update the creative suite to the latest available versions. It updates **all thirteen** published release-tag pins, including non-free ArtCraft. Application versions are read automatically from the selected manifests. Query each upstream's latest non-draft, non-prerelease GitHub release and edit its URL in `flake.nix` before updating the lock. A newer development snapshot may be ahead of the latest release: ask before a downgrade. Shared fonts/toolchains are separate updates when needed. Do not silently switch back to branch snapshots or use unpinned prebuilt binaries.
 
+The 2026-10-29 operator requests the **entire flake**: all13 published stable
+apps plus fonts, nixpkgs and rust-overlay, preserving their existing channels.
+Only source/hash/format/contracts/all-supported-platform/version/derivation
+evaluation and pure helper-level compile tests are allowed, not app/frontend/GUI
+or full Cargo vendor builds. Changed Cargo Git hashes must be verified through
+source-only fixed-output fetches. Keep unit/install checks enabled for the user's
+rebuild. Parent alone handles review/publication/consumer edits and ArtCraft
+exclusion. See [the frozen snapshot, upstream proofs and limits](../docs/releases-2026-10-29.md).
+The current PDF ONNX filename migration is source-proven; do not broadly relax
+model pair/hash/license assertions. FilmCraft's old patch is retired only because
+released0.14 already fixes the field and all six unmodified helper tests pass.
+
 The 2026-10-18 operator again requested lightweight source/hash/evaluation checks,
 not application/GUI builds. Owner main and mirror publication plus the consumer
 lock commit/push are approved; the operator will perform local rebuilds. See
@@ -66,7 +78,7 @@ The PDF compiler version is explicitly pinned in `packages/default.nix`; updatin
 ### 3. Reconcile dependency and asset hashes
 
 - **Cargo registries:** import the new upstream `Cargo.lock`; checksum failures require investigation, not weakening verification or deleting the lock.
-- **Cargo git dependencies:** `packages/craft.nix` maps exact full Git source strings to verified hashes for EffectCraft's FilmCraft commit `2c5ba7a72619935f0481f99d59409e0d1844b234` and the three craft-libs revisions selected by current app locks. Compare every git source in the new lock; unlisted strings must fail. For a changed revision, use its exact public source to prefetch the unpacked tree:
+- **Cargo git dependencies:** `packages/craft.nix` maps every exact full Git source string to verified hashes, currently FilmCraft, two craft-libs revisions, Storytold egui/winit, INDD and two winprint revisions. A manifest branch declaration is acceptable only with its exact full locked commit and source hash; it is not permission to fetch a moving branch. Compare every git source in the new lock; unlisted strings must fail. For a changed revision, use its exact public source to prefetch the unpacked tree:
 
   ```bash
   nix store prefetch-file --unpack --json \
@@ -83,7 +95,7 @@ The PDF compiler version is explicitly pinned in `packages/default.nix`; updatin
   The expected fixed-output failure reports `got: sha256-…`. Replace the placeholder with that verified hash and build `.#artcraft.frontend`, then `.#artcraft`. Do not hand-guess it, disable integrity checks or commit a placeholder. Keep the workspace source root, writable **build-local** npm cache, ignore-scripts policy and nested Vite shebang fix. Never chmod/chown a Nix store cache to satisfy npm's misleading permission advice.
 - **ArtCraft native build:** retain `SQLX_OFFLINE=true` and the shipped `.sqlx` metadata; never point compilation at a live database. BoringSSL needs Git for its bundled patches, plus CMake/Perl/bindgen. Do not bypass those patches with `BORING_BSSL_ASSUME_PATCHED`.
 - **Fonts:** inspect the new `craft-fonts` manifest and notices, preserving attribution and every OFL file. Missing required fonts must fail a build rather than silently producing an incomplete application.
-- **PDF models:** URLs/content/license hashes come directly from pinned `ATTRIBUTION.toml`. Build `.#pdfcraft.ocrModels`; preserve its credit manifest and `.LICENCE.txt` files. A changed model license/name/schema needs recipe/contract review, not a broad assertion removal. Model updates must not require first-use network installation.
+- **PDF models:** URLs/content/license hashes come directly from pinned `ATTRIBUTION.toml`. Build `.#pdfcraft.ocrModels`; preserve its credit manifest and `.LICENCE.txt` files. A changed model license/name/schema needs recipe/contract review, not a broad assertion removal. Current PDF0.15 ships an exact ONNX pair: compare its attribution, OCR constants, discovery code and RTen feature manifest, then retain exact pair/name/install checks and license hashes. Model updates must not require first-use network installation.
 
 ### 4. Evaluate, then actually build ALL apps
 
