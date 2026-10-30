@@ -110,6 +110,10 @@
             ${nixpkgs.lib.escapeShellArgs (map (name: "${name}=${inputs.${name}}") (builtins.attrNames (mkPackages pkgs)))}
           touch "$out"
         '';
+        cargo-resolution = pkgs.linkFarm "craft-cargo-resolution" (map (name: {
+          inherit name;
+          path = packages.${name}.tests.cargo-resolution;
+        }) (builtins.filter (name: name != "artcraft" && name != "default") (builtins.attrNames packages)));
       }
       // nixpkgs.lib.filterAttrs (name: _: name != "artcraft" && name != "default") packages);
 

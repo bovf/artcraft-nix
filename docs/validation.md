@@ -155,3 +155,35 @@ The full FilmCraft/Cargo/GUI/system rebuild remains operator-owned, as requested
 These source-bound helper tests do not claim a rerun of all75 binary tests,
 real file dialogs, hardware decoding or physical desktop behavior. Standard
 `doCheck`, GUI+CLI cargo test flags and install checks remain enabled.
+
+
+## Offline Cargo patch resolution
+
+The 2026-10-30 consumer CADCraft0.14 build failed before Rust compilation:
+Cargo could not find `egui_demo_lib` at the pinned Egui fork. All twelve native
+workspaces declare three/four unused Git patches in their unchanged lockfiles.
+Nixpkgs's `importCargoLock` vendors only `package` entries, while Cargo validates
+unused patch locations too. A private Nix-sandbox `cargo metadata --locked
+--offline` reproduces the exact original missing-package failure on the old vendor.
+
+The shared recipe augments only the importer's vendor input with those recorded
+unused Git entries, using the existing exact source/hash allowlist, then restores
+the original upstream `Cargo.lock` in the vendor output. Source `Cargo.toml` and
+`Cargo.lock`, selected versions, Git revisions/hashes, fonts/toolchains/models,
+normal Cargo build/test flags and app unit/install checks stay unchanged.
+Unknown Git sources still fail closed; no patch is removed or dependency enabled.
+
+`checks.x86_64-linux.cargo-resolution` passes actual offline locked metadata
+resolution for all twelve native workspaces using the same setup/consistency
+hooks and selected Cargo toolchain as their applications. Source/vendor/checked
+lock bytes match; every resolved package tuple already appears in the original
+lock and all unused entries remain inactive. This builds source/vendor/check
+outputs only, not Rust apps, proc macros, GUI, models or backends. Other supported
+platforms are evaluated, not natively tested. ArtCraft's separately licensed
+recipe/frontend is unchanged and not part of this native resolution aggregate.
+
+```bash
+nix build --no-link --no-write-lock-file --max-jobs 1 --cores 3 .#checks.x86_64-linux.cargo-resolution
+# One workspace only:
+nix build --no-link --no-write-lock-file .#cadcraft.tests.cargo-resolution
+```

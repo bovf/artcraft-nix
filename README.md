@@ -35,6 +35,14 @@ CC-BY-SA notices. Neither is a new application/GUI acceptance claim. See the
 include upstream self-update prompts; these are not a Nix update path and were not
 exercised. Update the producer pins and rebuild instead of replacing store binaries.
 
+Cargo's unused Git patches are vendored alongside used dependencies: Cargo still
+validates their package locations during offline resolution. The original
+application manifests/lockfiles and exact Git hash allowlist stay unchanged;
+unused crates are not activated. The lightweight
+[Cargo resolution check](docs/validation.md#offline-cargo-patch-resolution)
+reproduces the old failure and now resolves all twelve native workspaces without
+compiling or running an application.
+
 ## Build and run locally
 
 Requires Nix with `nix-command` and `flakes` enabled. Source builds are substantial; keep parallel jobs bounded on machines with limited RAM.
@@ -108,6 +116,7 @@ nix develop
 nix fmt -- --check flake.nix packages
 nix flake check --no-build --all-systems --no-write-lock-file
 nix build .#checks.x86_64-linux.source-contract --no-link
+nix build .#checks.x86_64-linux.cargo-resolution --no-link # offline, no app compilation
 nix flake check --no-write-lock-file  # actually builds the free apps and their checks
 # First update all thirteen release-tag URLs in flake.nix, then resolve them:
 nix flake update photocraft artcraft lightcraft filmcraft pdfcraft vectorcraft \

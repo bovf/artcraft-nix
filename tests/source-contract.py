@@ -56,7 +56,8 @@ for name, source in sources.items():
     cargo_lock = tomllib.loads((source / "Cargo.lock").read_text())
     locked_names = {p["name"] for p in cargo_lock["package"]}
     git_keys = {}
-    for package in cargo_lock["package"]:
+    # Unused Git patches still need vendoring for Cargo's offline patch lookup.
+    for package in cargo_lock["package"] + cargo_lock.get("patch", {}).get("unused", []):
         git_source = package.get("source", "")
         if not git_source.startswith("git+"):
             continue

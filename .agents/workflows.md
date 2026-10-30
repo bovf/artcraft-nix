@@ -10,6 +10,23 @@
 
 Lock updates are a maintenance operation, **not** a generic test. Freeze the selected snapshot while validating; do not endlessly chase moving upstream heads during a build.
 
+## Offline Cargo resolution repair (2026-10-30)
+
+The operator authorizes a source-only producer/consumer follow-up: include unused
+Git patches in vendoring and run actual offline resolution for all twelve native
+workspaces; no full application/system build or activation. Cargo checks even
+`Cargo.lock`'s `patch.unused` targets. Nixpkgs's importer reads only `package`, so
+use a vendor-only augmented input and restore the exact upstream vendor lock.
+Do not remove source patches, edit dependency pins, bypass lock consistency or
+turn off normal app tests. Both used/unused Git sources use the same verified
+fail-closed hash map. Run the aggregate check below in lightweight refreshes too.
+
+```bash
+nix build --no-link --no-write-lock-file --max-jobs 1 --cores 3 .#checks.x86_64-linux.cargo-resolution
+```
+
+[Current evidence/limits](../docs/validation.md#offline-cargo-patch-resolution).
+
 ## Update all applications
 
 This is the default workflow when asked to update the creative suite to the latest available versions. It updates **all thirteen** published release-tag pins, including non-free ArtCraft. Application versions are read automatically from the selected manifests. Query each upstream's latest non-draft, non-prerelease GitHub release and edit its URL in `flake.nix` before updating the lock. A newer development snapshot may be ahead of the latest release: ask before a downgrade. Shared fonts/toolchains are separate updates when needed. Do not silently switch back to branch snapshots or use unpinned prebuilt binaries.
@@ -103,6 +120,7 @@ The PDF compiler version is explicitly pinned in `packages/default.nix`; updatin
 nix fmt -- --check flake.nix packages
 nix flake check --no-build --all-systems --no-write-lock-file
 nix build --no-link --no-write-lock-file .#checks.x86_64-linux.source-contract
+nix build --no-link --no-write-lock-file .#checks.x86_64-linux.cargo-resolution
 nix build --keep-going --no-link --no-write-lock-file --max-jobs 1 --cores 3 \
   "${apps[@]/#/.#}"
 nix flake check --no-write-lock-file --max-jobs 1 --cores 3

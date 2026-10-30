@@ -46,21 +46,41 @@
     "git+https://github.com/storytold/winprint.rs?rev=5f80b9baf6b58937c401656634e42d33f00ddf49#5f80b9baf6b58937c401656634e42d33f00ddf49" = "sha256-wnz/VbqQ3j/x1PEq6Elxu/oSjVqdONfqQmZ31NsTIIc=";
   };
   pdfModels = import ./pdf-models.nix {inherit lib fetchurl runCommand src;};
-  gitPackages =
-    builtins.filter (p: lib.hasPrefix "git+" (p.source or ""))
-    (builtins.fromTOML (builtins.readFile "${src}/Cargo.lock")).package;
-in
-  rustPlatform.buildRustPackage {
-    inherit pname src version;
-    cargoLock = {
-      lockFile = "${src}/Cargo.lock";
-      # Exact locked sources only; unknown Git dependencies fail closed.
+  lockContents = builtins.readFile "${src}/Cargo.lock";
+  lock = builtins.fromTOML lockContents;
+  unusedGitPatches = builtins.filter (p: lib.hasPrefix "git+" (p.source or "")) (lock.patch.unused or []);
+  gitPackages = builtins.filter (p: lib.hasPrefix "git+" (p.source or "")) (lock.package ++ unusedGitPatches);
+  # Cargo validates unused patch targets too; importCargoLock only reads package entries.
+  vendorLockContents =
+    lockContents
+    + lib.concatMapStrings (p: ''
+
+      [[package]]
+      name = ${builtins.toJSON p.name}
+      version = ${builtins.toJSON p.version}
+      source = ${builtins.toJSON p.source}
+    '')
+    unusedGitPatches;
+  cargoDeps =
+    (rustPlatform.importCargoLock {
+      lockFileContents = vendorLockContents;
+      # Used and unused sources share the same exact, fail-closed hash allowlist.
       outputHashes = lib.listToAttrs (map (p: {
           name = "${p.name}-${p.version}";
           value = assert builtins.hasAttr p.source gitSourceHashes; gitSourceHashes.${p.source};
         })
         gitPackages);
-    };
+    }).overrideAttrs (old: {
+      # Keep the real lock untouched for the setup hook's consistency check and --locked.
+      buildCommand =
+        old.buildCommand
+        + ''
+          ln -sf ${src}/Cargo.lock "$out/Cargo.lock"
+        '';
+    });
+in
+  rustPlatform.buildRustPackage {
+    inherit pname src version cargoDeps;
     cargoBuildFlags = cargoFlags;
     cargoTestFlags = cargoFlags;
     nativeBuildInputs = [pkg-config makeWrapper];
@@ -125,7 +145,14 @@ in
         test -s "$out/share/pdfcraft/models/text-recognition.onnx"
         test -s "$out/share/pdfcraft/models/ATTRIBUTION.toml"
       '';
-    passthru = {upstreamVersion = version;} // lib.optionalAttrs (pname == "pdfcraft") {ocrModels = pdfModels;};
+    passthru =
+      {
+        upstreamVersion = version;
+        tests.cargo-resolution = import ../tests/cargo-resolution.nix {
+          inherit runCommand rustPlatform src cargoDeps pname;
+        };
+      }
+      // lib.optionalAttrs (pname == "pdfcraft") {ocrModels = pdfModels;};
     meta = {
       description = "${lib.toUpper (lib.substring 0 1 pname)}${lib.substring 1 (-1) pname} desktop application and companion CLI";
       homepage = "https://github.com/storytold/${pname}";
