@@ -7,7 +7,7 @@ import re
 import sys
 import tomllib
 
-NAMES = set("photocraft artcraft lightcraft filmcraft pdfcraft vectorcraft effectcraft designcraft wordcraft cadcraft gridcraft deckcraft soundcraft".split())
+NAMES = set("photocraft artcraft lightcraft filmcraft pdfcraft vectorcraft effectcraft designcraft wordcraft cadcraft gridcraft deckcraft soundcraft figcraft texturecraft materialcraft craft-anything".split())
 
 
 def check_lock(lock):
@@ -79,7 +79,13 @@ for name, source in sources.items():
         assert (source / f"apps/{name}/Cargo.toml").is_file()
         assert (source / f"packaging/linux/ai.storyteller.{name}.desktop").is_file()
         assert (source / f"assets/app-icon/hicolor/256x256/apps/ai.storyteller.{name}.png").is_file()
-        assert (source / f"packaging/linux/ai.storyteller.{name}.mime.xml").is_file()
+        mime = source / f"packaging/linux/ai.storyteller.{name}.mime.xml"
+        if name == "craft-anything":
+            assert not mime.exists(), "Review Craft Anything MIME packaging: upstream now supplies one"
+            assert "MimeType=" not in (source / f"packaging/linux/ai.storyteller.{name}.desktop").read_text()
+            assert (source / "NOTICE").is_file() and (source / "ATTRIBUTION.md").is_file()
+        else:
+            assert mime.is_file()
         if name == "filmcraft":
             helper = (source / "apps/filmcraft/src/dev_icon.rs").read_text()
             body = helper.split("fn desktop_file_content(", 1)[1].split("fn escape_exec_argument(", 1)[0]

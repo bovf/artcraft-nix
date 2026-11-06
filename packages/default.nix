@@ -29,5 +29,9 @@ in {
   gridcraft = craft "gridcraft";
   deckcraft = craft "deckcraft";
   soundcraft = craft "soundcraft";
+  figcraft = craft "figcraft";
+  texturecraft = craft "texturecraft";
+  materialcraft = craft "materialcraft";
+  craft-anything = craft "craft-anything";
   artcraft = pkgs.callPackage ./artcraft.nix {src = inputs.artcraft;};
 }

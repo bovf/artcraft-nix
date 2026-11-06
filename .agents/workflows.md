@@ -29,7 +29,7 @@ nix build --no-link --no-write-lock-file --max-jobs 1 --cores 3 .#checks.x86_64-
 
 ## Update all applications
 
-This is the default workflow when asked to update the creative suite to the latest available versions. It updates **all thirteen** published release-tag pins, including non-free ArtCraft. Application versions are read automatically from the selected manifests. Query each upstream's latest non-draft, non-prerelease GitHub release and edit its URL in `flake.nix` before updating the lock. A newer development snapshot may be ahead of the latest release: ask before a downgrade. Shared fonts/toolchains are separate updates when needed. Do not silently switch back to branch snapshots or use unpinned prebuilt binaries.
+This is the default workflow when asked to update the creative suite to the latest available versions. It updates **all seventeen** published release-tag pins, including non-free ArtCraft. Application versions are read automatically from the selected manifests. Query each upstream's latest non-draft, non-prerelease GitHub release and edit its URL in `flake.nix` before updating the lock. A newer development snapshot may be ahead of the latest release: ask before a downgrade. Shared fonts/toolchains are separate updates when needed. Do not silently switch back to branch snapshots or use unpinned prebuilt binaries.
 
 The 2026-10-29 operator requests the **entire flake**: all13 published stable
 apps plus fonts, nixpkgs and rust-overlay, preserving their existing channels.
@@ -42,6 +42,13 @@ exclusion. See [the frozen snapshot, upstream proofs and limits](../docs/release
 The current PDF ONNX filename migration is source-proven; do not broadly relax
 model pair/hash/license assertions. FilmCraft's old patch is retired only because
 released0.14 already fixes the field and all six unmodified helper tests pass.
+
+Current 2026-11-05 authority covers the complete suite, native builds/runtime
+fixtures and approved Heavy/Spy consumer integration on private feature branches.
+It includes four new apps, not community SolidCraft or placeholder repositories.
+Non-free ArtCraft remains local/personal only, excluded from installation/cache.
+No main merge, source-mirror publication, activation or real account/model/device
+use is authorized. [Current selection/limits](../docs/releases-2026-11-05.md).
 
 The 2026-10-18 operator again requested lightweight source/hash/evaluation checks,
 not application/GUI builds. Owner main and mirror publication plus the consumer
@@ -74,10 +81,10 @@ nix eval --json --no-write-lock-file .#packages.x86_64-linux \
 
 ### 2. Resolve all upstreams once
 
-First edit all thirteen application input URLs to the selected release tags; locking the existing tag does not discover a newer release. Then run these commands in Bash, from **this repository**, not a consumer flake:
+First edit all seventeen application input URLs to the selected release tags; locking the existing tag does not discover a newer release. Then run these commands in Bash, from **this repository**, not a consumer flake:
 
 ```bash
-apps=(photocraft artcraft lightcraft filmcraft pdfcraft vectorcraft effectcraft designcraft wordcraft cadcraft gridcraft deckcraft soundcraft)
+apps=(photocraft artcraft lightcraft filmcraft pdfcraft vectorcraft effectcraft designcraft wordcraft cadcraft gridcraft deckcraft soundcraft figcraft texturecraft materialcraft craft-anything)
 nix flake update "${apps[@]}"
 git diff -- flake.lock
 ```
@@ -95,7 +102,7 @@ The PDF compiler version is explicitly pinned in `packages/default.nix`; updatin
 ### 3. Reconcile dependency and asset hashes
 
 - **Cargo registries:** import the new upstream `Cargo.lock`; checksum failures require investigation, not weakening verification or deleting the lock.
-- **Cargo git dependencies:** `packages/craft.nix` maps every exact full Git source string to verified hashes, currently FilmCraft, two craft-libs revisions, Storytold egui/winit, INDD and two winprint revisions. A manifest branch declaration is acceptable only with its exact full locked commit and source hash; it is not permission to fetch a moving branch. Compare every git source in the new lock; unlisted strings must fail. For a changed revision, use its exact public source to prefetch the unpacked tree:
+- **Cargo git dependencies:** `packages/craft.nix` maps every exact full Git source string to verified hashes, including FilmCraft, cross-app craft-libs revisions, Storytold egui/winit, INDD and two winprint revisions. A manifest branch declaration is acceptable only with its exact full locked commit and source hash; it is not permission to fetch a moving branch. Compare every git source in the new lock; unlisted strings must fail. For a changed revision, use its exact public source to prefetch the unpacked tree:
 
   ```bash
   nix store prefetch-file --unpack --json \
@@ -121,10 +128,17 @@ nix fmt -- --check flake.nix packages
 nix flake check --no-build --all-systems --no-write-lock-file
 nix build --no-link --no-write-lock-file .#checks.x86_64-linux.source-contract
 nix build --no-link --no-write-lock-file .#checks.x86_64-linux.cargo-resolution
+nix build --no-link --no-write-lock-file .#checks.x86_64-linux.photocraft-check-environment
 nix build --keep-going --no-link --no-write-lock-file --max-jobs 1 --cores 3 \
   "${apps[@]/#/.#}"
 nix flake check --no-write-lock-file --max-jobs 1 --cores 3
 ```
+
+PhotoCraft's Linux checks require unprivileged user/mount/network/cgroup namespaces
+and a private read-only cgroup v2 view. The test wrapper drops all child capabilities;
+its fast check verifies actual source memory-policy negatives and readable real
+constraints. Never disable its guards/tests or request global daemon sandbox changes
+merely to pass a build. [Current rationale](../docs/releases-2026-11-05.md).
 
 The explicit build array includes ArtCraft; ordinary checks intentionally exclude its non-free binary. Review upstream's license before building it and never publish its artifacts/cache without permission. Use a private Linux build environment and enough disk space; a full source build can take hours. `--keep-going` allows independent results but an eventual nonzero exit is **not** acceptance. Consume final command statuses and inspect failures, not only the last log line or a derivation evaluation.
 

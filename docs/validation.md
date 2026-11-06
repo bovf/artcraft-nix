@@ -1,6 +1,46 @@
 # Validation evidence and limits
 
-**Current release validation is source/evaluation-only.** The [2026-10-29 entire-flake update](releases-2026-10-29.md) advances twelve apps, fonts, nixpkgs and rust-overlay, retaining latest ArtCraft0.41.0 and the Linux dialog wrappers. Five changed Cargo Git trees and the official PDF ONNX model pair are source-fetch/hash verified. All65 font manifest faces, all13 source contracts and all supported platforms are checked. FilmCraft's upstream MIME fix retires the old patch with6/6 unmodified isolated helper tests. The new nixpkgs Rust1.99/LLVM21 still fails the compile-only AVX512 probe; official1.98.1 passes, justifying the retained PDF exception. No application/frontend/full-vendor/GUI/editorial/hardware acceptance is claimed. Earlier application build/GUI receipts are historical and must not be reused for these new derivations.
+## Current private candidate — 2026-11-05
+
+The [complete 17-app snapshot](releases-2026-11-05.md) passed local x86_64-linux
+source builds with configured unit/install checks, including ArtCraft's separate
+frontend and permitted personal-use studio build. All 17 exact drv/output
+bindings also passed isolated Xvfb/software-rendered mapped-window checks with
+non-uniform interiors. These are synthetic/default-document checks, not every
+artistic workflow or physical GPU/audio/portal acceptance.
+
+- All 17 source/assets/font/model/Cargo contracts, all 16 native workspaces'
+  original-lock offline resolution and all three supported-system evaluations
+  pass. ARM Linux/macOS remain evaluation-only. Existing upstream ignored tests
+  are not relabeled covered, nor are all workspace/hardware tests claimed.
+- PhotoCraft's test-only private D-Bus/cgroup environment retains original
+  auditable Cargo, test arguments and memory refusal policy. Its fast gate runs
+  14 actual-source/environment cases, including unreadable/limited memory
+  fixtures and zero child effective/bounding/ambient capabilities.
+- FigCraft, TextureCraft and MaterialCraft pass actual installed CLI command
+  listing and stdio discovery, synthetic project creation/save and rejected
+  out-of-root saves. Texture/Material additionally return bounded CPU-rendered
+  PNGs. This does not admit them to the existing video/private-namespace router.
+- Craft Anything passes real installed CLI/stdio empty-session/target reads in
+  forced Clean room, and actual installed Pi integration with eight exact reads.
+  No setup/doctor, real target, provider/plugin, capture or rebuild was invoked.
+- The separate Pi runtime candidate passes all 24 existing installed
+  video/editorial/speech/artifact/native-confinement/twelve-backend scenarios.
+  Its 38 wire tool names/descriptions/input/output schemas remain structurally
+  identical after proper expected-error tagging; strict consent and unexpected
+  crash handling are tested separately. [Runtime compatibility scope](https://gitlab.dobryops.com/nix/pi-nix/-/blob/chore/update-craft-stack-2026-11-05/docs/craft-update-2026-11-05.md).
+
+Local receipts under `/tmp/badwater-craft-update-2026-11-05.LTgVabZ1` include
+`artcraft-nix/all-native-builds.json`, `artcraft-nix/gui-seventeen.json` and
+`native-runtime-acceptance.json`. Failed/aborted investigations remain separate;
+no guard/test was disabled to relabel one successful. ArtCraft stays excluded
+from consumer installation and binary/cache publication. Private feature
+publication/consumer adoption are separate gates; main/mirror publication,
+activation, personal data/accounts and real hardware remain unapproved here.
+
+## Historical release selections
+
+**The 2026-10-29 release validation was source/evaluation-only.** The [2026-10-29 entire-flake update](releases-2026-10-29.md) advances twelve apps, fonts, nixpkgs and rust-overlay, retaining latest ArtCraft0.41.0 and the Linux dialog wrappers. Five changed Cargo Git trees and the official PDF ONNX model pair are source-fetch/hash verified. All65 font manifest faces, all13 source contracts and all supported platforms are checked. FilmCraft's upstream MIME fix retires the old patch with6/6 unmodified isolated helper tests. The new nixpkgs Rust1.99/LLVM21 still fails the compile-only AVX512 probe; official1.98.1 passes, justifying the retained PDF exception. No application/frontend/full-vendor/GUI/editorial/hardware acceptance is claimed. Earlier application build/GUI receipts are historical and must not be reused for these new derivations.
 
 **Preceding release validation was partial.** The [2026-10-11 release update](releases-2026-10-11.md) originally ran no application builds/tests or acceptance gates, at the operator's request. The separately authorized Linux file-dialog follow-up below adds scoped current-release evidence, not full-suite/editorial acceptance. The companion capability JSON and the subsequent initial-acceptance sections remain historical snapshots.
 

@@ -8,7 +8,7 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
     photocraft = {
-      url = "github:storytold/photocraft/v0.17.0";
+      url = "github:storytold/photocraft/v0.20.2";
       flake = false;
     };
     artcraft = {
@@ -16,47 +16,63 @@
       flake = false;
     };
     lightcraft = {
-      url = "github:storytold/lightcraft/v0.15.0";
+      url = "github:storytold/lightcraft/v0.18.1";
       flake = false;
     };
     filmcraft = {
-      url = "github:storytold/filmcraft/v0.14.0";
+      url = "github:storytold/filmcraft/v0.17.1";
       flake = false;
     };
     pdfcraft = {
-      url = "github:storytold/pdfcraft/v0.15.0";
+      url = "github:storytold/pdfcraft/v0.18.2";
       flake = false;
     };
     vectorcraft = {
-      url = "github:storytold/vectorcraft/v0.18.0";
+      url = "github:storytold/vectorcraft/v0.21.1";
       flake = false;
     };
     effectcraft = {
-      url = "github:storytold/effectcraft/v0.18.0";
+      url = "github:storytold/effectcraft/v0.21.1";
       flake = false;
     };
     designcraft = {
-      url = "github:storytold/designcraft/v0.14.0";
+      url = "github:storytold/designcraft/v0.17.2";
       flake = false;
     };
     wordcraft = {
-      url = "github:storytold/wordcraft/v0.12.0";
+      url = "github:storytold/wordcraft/v0.15.2";
       flake = false;
     };
     cadcraft = {
-      url = "github:storytold/cadcraft/v0.14.0";
+      url = "github:storytold/cadcraft/v0.17.1";
       flake = false;
     };
     gridcraft = {
-      url = "github:storytold/gridcraft/v0.13.0";
+      url = "github:storytold/gridcraft/v0.16.1";
       flake = false;
     };
     deckcraft = {
-      url = "github:storytold/deckcraft/v0.12.0";
+      url = "github:storytold/deckcraft/v0.15.1";
       flake = false;
     };
     soundcraft = {
-      url = "github:storytold/soundcraft/v0.14.0";
+      url = "github:storytold/soundcraft/v0.17.1";
+      flake = false;
+    };
+    figcraft = {
+      url = "github:storytold/figcraft/v0.15.1";
+      flake = false;
+    };
+    texturecraft = {
+      url = "github:storytold/texturecraft/v0.3.2";
+      flake = false;
+    };
+    materialcraft = {
+      url = "github:storytold/materialcraft/v0.1.2";
+      flake = false;
+    };
+    craft-anything = {
+      url = "github:storytold/craft-anything/v0.3.0";
       flake = false;
     };
     craft-fonts = {
@@ -114,6 +130,9 @@
           inherit name;
           path = packages.${name}.tests.cargo-resolution;
         }) (builtins.filter (name: name != "artcraft" && name != "default") (builtins.attrNames packages)));
+      }
+      // nixpkgs.lib.optionalAttrs pkgs.stdenv.hostPlatform.isLinux {
+        photocraft-check-environment = packages.photocraft.tests.check-environment;
       }
       // nixpkgs.lib.filterAttrs (name: _: name != "artcraft" && name != "default") packages);
 

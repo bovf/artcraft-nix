@@ -20,11 +20,21 @@ This is independent packaging, not an official or endorsed ArtCraft release. Dev
 | `gridcraft` | `gridcraft-cli` | Spreadsheets |
 | `deckcraft` | `deckcraft-cli` | Presentations |
 | `soundcraft` | `soundcraft-cli` | Audio workstation |
+| `figcraft` | `figcraft-cli` | Interface design and prototyping |
+| `texturecraft` | `texturecraft-cli` | 3D texture painting |
+| `materialcraft` | `materialcraft-cli` | Node-based material design |
+| `craft-anything` | `craft-anything-cli` | Permission-first software exploration and reconstruction |
 | `artcraft` | — | Tauri/React creative studio; **non-free**, see below |
 
-Every named package builds from its locked upstream source and Cargo lockfile. The twelve native Rust/egui packages install both commands, upstream Linux desktop entries/icons/MIME definitions and required dynamic-library wrappers. Audio packages link ALSA on Linux; multimedia packages include FFmpeg in their command search path. Linux wrappers also expose the D-Bus client library for `rfd` file dialogs and Zenity for its fallback. The host still supplies the desktop portal/session; see [Linux file dialogs](docs/linux-file-dialogs.md). Shared `craft-fonts` is a pinned compile-time input, with font attribution and OFL notices installed alongside the code licenses.
+Every named package builds from its locked upstream source and Cargo lockfile. The sixteen native Rust/egui packages install both commands, upstream Linux desktop entries/icons and required dynamic-library wrappers. Fifteen supply document MIME definitions; Craft Anything's upstream desktop entry declares none. Audio packages link ALSA on Linux; multimedia packages include FFmpeg in their command search path. Linux wrappers also expose the D-Bus client library for `rfd` file dialogs and Zenity for its fallback. The host still supplies the desktop portal/session; see [Linux file dialogs](docs/linux-file-dialogs.md). Shared `craft-fonts` is a pinned compile-time input, with font attribution and OFL notices installed alongside the code licenses.
 
-All thirteen application inputs select explicit published release tags; their resolved revisions, fonts, nixpkgs and `rust-overlay` are pinned in `flake.lock`. Package versions come from those release manifests. The recipes use no `latest` binary downloads or first-launch build scripts. The [2026-10-29 entire-flake update](docs/releases-2026-10-29.md) advances all twelve native apps, shared fonts, nixpkgs and rust-overlay; ArtCraft remains at the latest published 0.41.0. Only lightweight source/evaluation checks were requested: these new applications have not been built or runtime-tested. The [Linux file-dialog follow-up](docs/validation.md#linux-file-dialog-follow-up-2026-10-12) is historical evidence for preceding PhotoCraft/FilmCraft releases, not acceptance of these pins. PDFCraft includes the upstream default English OCR models and their CC-BY-SA-4.0 notices, fetched against upstream's SHA-256 values. Other optional features remain at upstream defaults. ArtCraft builds its frontend separately from its Rust backend.
+All seventeen application inputs select explicit published release tags; resolved revisions, fonts, nixpkgs and `rust-overlay` are pinned in `flake.lock`, with versions derived from upstream manifests. The [2026-11-05 private candidate](docs/releases-2026-11-05.md) updates the complete suite and producer dependencies; ArtCraft remains at its newest published 0.41.0. There are no `latest` binary downloads or first-launch build scripts. Older source-only release selections and GUI receipts are historical, not acceptance of current pins. [Validation](docs/validation.md) separates current native checks from non-native/hardware/service limits. PDFCraft retains upstream-hashed English OCR models and CC-BY-SA notices; ArtCraft builds its non-free frontend separately.
+
+PhotoCraft's Linux tests use private user/network/cgroup namespaces with a
+read-only cgroup v2 view and no child capabilities; original memory guards and
+Cargo test arguments remain intact. `checks.x86_64-linux.photocraft-check-environment`
+is the fast environment/policy regression gate. Missing kernel namespace support
+fails rather than disabling tests. No daemon settings or host mounts change.
 
 FilmCraft0.14.0 fixes its development desktop MIME field upstream, so the obsolete
 0.8.0 patch is retired. All six unmodified helper-module tests pass in isolation;
@@ -40,7 +50,7 @@ validates their package locations during offline resolution. The original
 application manifests/lockfiles and exact Git hash allowlist stay unchanged;
 unused crates are not activated. The lightweight
 [Cargo resolution check](docs/validation.md#offline-cargo-patch-resolution)
-reproduces the old failure and now resolves all twelve native workspaces without
+reproduces the old failure and resolves the selected native workspaces without
 compiling or running an application.
 
 ## Build and run locally
@@ -99,7 +109,7 @@ The overlay uses the consumer's packages and toolchain, except PDFCraft's explic
 inputs.artcraft-nix.inputs.nixpkgs.follows = "nixpkgs";
 ```
 
-Only do this with compatible dependencies: current sources require Rust 1.95 or newer for several apps. Changing/following nixpkgs requires rebuilding and validating, not merely evaluating output names.
+Only do this with compatible dependencies: several sources require Rust1.95 and Craft Anything requires1.97. Changing/following nixpkgs requires rebuilding and validating, not merely evaluating output names.
 
 ## ArtCraft licensing and redistribution
 
@@ -107,7 +117,7 @@ Only do this with compatible dependencies: current sources require Rust 1.95 or 
 
 Selecting `nix build .#artcraft` opts into this flake's specifically permitted non-free package. Overlay consumers must explicitly allow `artcraft` in their own nixpkgs configuration, for example `nixpkgs.config.allowUnfreePredicate = pkg: builtins.elem (pkg.pname or "") [ "artcraft" "artcraft-frontend" ];`. The default package and automatic free-package checks exclude ArtCraft. Build it explicitly for permitted personal use; no binary publication or active CI job is configured.
 
-The other twelve apps declare `MIT OR Apache-2.0` for code. Embedded fonts have their own OFL notices, PDF OCR model data is CC-BY-SA-4.0, and supplied brand assets have separate trademark/use restrictions; those notices are retained. Do not interpret the packaging repository's license as relicensing upstream software/assets, and do not represent modified or unofficial builds as endorsed releases.
+The other sixteen apps declare `MIT OR Apache-2.0` for code. Embedded fonts have their own OFL notices, PDF OCR model data is CC-BY-SA-4.0, and supplied brand assets have separate trademark/use restrictions; those notices are retained. Do not interpret the packaging repository's license as relicensing upstream software/assets, and do not represent modified or unofficial builds as endorsed releases.
 
 ## Maintenance and updates
 
@@ -118,9 +128,10 @@ nix flake check --no-build --all-systems --no-write-lock-file
 nix build .#checks.x86_64-linux.source-contract --no-link
 nix build .#checks.x86_64-linux.cargo-resolution --no-link # offline, no app compilation
 nix flake check --no-write-lock-file  # actually builds the free apps and their checks
-# First update all thirteen release-tag URLs in flake.nix, then resolve them:
+# First update all seventeen release-tag URLs in flake.nix, then resolve them:
 nix flake update photocraft artcraft lightcraft filmcraft pdfcraft vectorcraft \
-  effectcraft designcraft wordcraft cadcraft gridcraft deckcraft soundcraft
+  effectcraft designcraft wordcraft cadcraft gridcraft deckcraft soundcraft \
+  figcraft texturecraft materialcraft craft-anything
 # Refresh shared fonts separately when required:
 nix flake update craft-fonts
 # Update toolchain inputs separately when requested/required:
