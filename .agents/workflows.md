@@ -47,8 +47,10 @@ Current 2026-11-05 authority covers the complete suite, native builds/runtime
 fixtures and approved Heavy/Spy consumer integration on private feature branches.
 It includes four new apps, not community SolidCraft or placeholder repositories.
 Non-free ArtCraft remains local/personal only, excluded from installation/cache.
-No main merge, source-mirror publication, activation or real account/model/device
-use is authorized. [Current selection/limits](../docs/releases-2026-11-05.md).
+The operator subsequently approved promoting this exact tested selection to main
+and running the normal source-only GitHub/Codeberg mirror CI. No activation, binary
+publication or real account/model/device use is authorized.
+[Current selection/limits](../docs/releases-2026-11-05.md).
 
 The 2026-10-18 operator again requested lightweight source/hash/evaluation checks,
 not application/GUI builds. Owner main and mirror publication plus the consumer

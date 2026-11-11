@@ -13,8 +13,9 @@ This is an independent, reusable source-distribution flake for seventeen Storyto
 The 2026-11-05 operator approved all seventeen current Storytold releases, adding
 FigCraft/TextureCraft/MaterialCraft/Craft Anything. Build all apps locally, including
 non-free ArtCraft for permitted personal use only; retain its consumer/cache
-exclusions. Publish tested private `chore/update-craft-stack-2026-11-05` refs, not
-main/mirrors/activation. Relevant consumer/shared-policy changes are explicitly
+exclusions. The tested private `chore/update-craft-stack-2026-11-05` snapshot is now approved
+for canonical main and normal source-only GitHub/Codeberg mirror CI publication;
+public consumers use `github:bovf/artcraft-nix`. No activation is authorized. Relevant consumer/shared-policy changes are explicitly
 approved for Heavy/Spy, including disabled-by-default Craft Anything Pi MCP/skill.
 [Snapshot and boundaries](../docs/releases-2026-11-05.md).
 
